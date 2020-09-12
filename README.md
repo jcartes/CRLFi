@@ -39,5 +39,5 @@ Scan from URLs
 1. Nothing. If you think there is feel free to raise issue.
 
 ## FAQ
-1. Does CRLF injection is ended in HTTP/2? 
-Well, no. I found CRLF injection on 2 http/2 enabled website with http2. Also, checkout [CRLF injection in HTTP2](https://security.stackexchange.com/questions/235046/does-http-2-prevent-security-vulnerabilites-like-crlf-injection)
+1. Does CRLF injection is ended in HTTP/2?  
+* Well, no. I found CRLF injection on 2 http/2 enabled website with http2. Also checkout this: [CRLF injection in HTTP2](https://security.stackexchange.com/questions/235046/does-http-2-prevent-security-vulnerabilites-like-crlf-injection)
