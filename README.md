@@ -40,4 +40,4 @@ Scan from URLs
 
 ## FAQ
 1. Does CRLF injection only affect HTTP/1?  
-* Well, no. I found CRLF injection on 2 different HTTP/2 enabled website with `--http2` in curl. Also checkout this: [CRLF injection in HTTP2](https://security.stackexchange.com/questions/235046/does-http-2-prevent-security-vulnerabilites-like-crlf-injection)
+* Well, no. I found CRLF injection on 2 different HTTP/2 enabled website using this tool and confirmed with curl with `--http2` in curl. Also my question: [CRLF injection in HTTP2](https://security.stackexchange.com/questions/235046/does-http-2-prevent-security-vulnerabilites-like-crlf-injection)
