@@ -2,6 +2,12 @@ class PathFunction:
     def __init__(self):
         pass
     
+    def urlerslasher(self, xpath: str) -> str:
+        if not xpath:
+            return xpath
+        ypath = self.slasher(self.urler(xpath))
+        return ypath
+    
     def slasher(self, xpath: str) -> str:
         if not xpath:
             return xpath + '/'

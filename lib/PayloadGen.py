@@ -1,7 +1,7 @@
-from re import findall,search
+from re import findall
+from re import search
 from requests import Session
 from termcolor import colored
-from random import randint as rdi
 from requests.exceptions  import ConnectionError, Timeout
 
 from lib.PathFunctions import PathFunction
@@ -25,7 +25,7 @@ class PayloadGenerator:
     def query_generator(self, parsed_url: str, payloads: list) -> list:
         try:
             NotTried, ToTry = [], []
-            upto_path = self.FPathApp.slasher(self.FPathApp.urler(parsed_url.netloc)) + self.FPathApp.payloader(parsed_url.path) 
+            upto_path = self.FPathApp.urlerslasher(parsed_url.netloc) + self.FPathApp.payloader(parsed_url.path) 
             query = parsed_url.query
             if len(query) > 550:
                 return ToTry
@@ -45,8 +45,8 @@ class PayloadGenerator:
             if not len(NotTried):
                 return ToTry
             for payload in payloads:
-                QueryList = self.ReplacerApp.only_replacement(parameters, values, self.FPathApp.payloader(payload), NotTried)
-                PayloadsList = self.ReplacerApp.gen_url(upto_path, QueryList)
+                query_list = self.ReplacerApp.only_replacement(parameters, values, self.FPathApp.payloader(payload), NotTried)
+                PayloadsList = self.ReplacerApp.gen_url(upto_path, query_list)
                 [ToTry.append(TriablePayloads) for TriablePayloads in PayloadsList]
             return ToTry
         except Exception as E:
@@ -55,7 +55,7 @@ class PayloadGenerator:
     def path_generator(self, parsed_url: str, payloads: list) -> list:
         try:
             ToTry = []
-            upto_path = self.FPathApp.slasher(self.FPathApp.urler(parsed_url.netloc)) 
+            upto_path = self.FPathApp.urlerslasher(parsed_url.netloc) 
             if parsed_url.path == '/' or len(parsed_url.path) == 1:
                 PayloadsList = self.netloc_generator(parsed_url, payloads)
                 ToTry = [payloads for payloads in PayloadsList]
@@ -117,7 +117,7 @@ class PayloadGenerator:
                 self.Skipper.add_netloc(parsed_url.netloc)
 
             for payload in payloads:
-                temp_pay = self.FPathApp.urler(self.FPathApp.slasher(parsed_url.netloc))
+                temp_pay = self.FPathApp.urlerslasher(parsed_url.netloc)
                 ToTry.append(self.PathApp.FuzzPath(temp_pay, payload))
             return ToTry
         except Exception as E:
@@ -143,7 +143,7 @@ class PayloadGenerator:
             if self.error == -1:
                 return False
             try:
-                response = self.s.head(self.FPathApp.urler(self.FPathApp.slasher(parsed_url.netloc)), allow_redirects=True, timeout=8)
+                response = self.s.head(self.FPathApp.urlerslasher(parsed_url.netloc), allow_redirects=True, timeout=8)
             except Exception as E:
                 print(f"{ColorObj.bad} Error {E},{E.__class__} occured. Cant connect")
                 return True

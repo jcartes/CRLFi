@@ -26,7 +26,6 @@ PayloaderApp = PayloadGenerator()
 if argv.domain:
     PayloaderApp.set_error_page(argv.domain)
 #input_wordlist = [line.rstrip('\n') for line in open(argv.wordlist)]
-#output_file = open(FPathApp.slasher(argv.output_directory) + argv.domain + '.CRLFi', 'a')
 
 def async_generator(url: str):
     global to_try
@@ -70,6 +69,7 @@ with ThreadPoolExecutor(max_workers=argv.threads) as Submitter:
     except Exception as E:
         print(f"{ColorObj.bad} Exception {E},{E.__class__} occured in future object!")
 
+#output_file = open(FPathApp.slasher(argv.output_directory) + argv.domain + '.CRLFi', 'a')
     # for future_object in future_objects:
         # the_payload, is_exploitable = future_object.result()
         # if is_exploitable:
