@@ -16,7 +16,6 @@ class PayloadGenerator:
         self.Skipper = Skip()
         self.PathApp = PathFuzz()
     
-    
     def query_generator(self, parsed_url: str, payloads: list) -> list:
         try:
             NotTried, ToTry = [], []
@@ -50,7 +49,7 @@ class PayloadGenerator:
     def path_generator(self, parsed_url: str, payloads: list) -> list:
         try:
             ToTry = []
-            upto_path = self.FPathApp.urlerslasher(parsed_url.netloc) 
+            upto_path = self.FPathApp.urlerslasher(parsed_url.netloc)
             if parsed_url.path == '/' or len(parsed_url.path) == 1:
                 PayloadsList = self.netloc_generator(parsed_url, payloads)
                 ToTry = [payloads for payloads in PayloadsList]
@@ -91,10 +90,10 @@ class PayloadGenerator:
                 head(self.FPathApp.urler(parsed_url.netloc), timeout=5000)
             except Exception as E:
                 if str(E.__class__) == "<class 'nimpy.OSError'>":
-                    print("Unrecognized service")
+                    print("{ColorObj.bad} Could not connect! {E}, {E.__class__} occured")
                     return ToTry
                 elif str(E.__class__) == "<class 'nimpy.TimeoutError'>":
-                    print("Timed out")
+                    print("{ColorObj.bad Timed out.Error occured: {E}")
                     return ToTry
                 else:
                     print(f"{ColorObj.bad} Other connection error in netloc {E},{E.__class__} occured")

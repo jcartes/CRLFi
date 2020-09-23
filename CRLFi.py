@@ -31,19 +31,19 @@ def async_generator(url: str):
     try:
         if parsed_url.query:
             print(f"{ColorObj.information} Generating query payload for: {colored(url, color='cyan')}")
-            for payloads_full_url in PayloaderApp.query_generator(parsed_url, payloads):
-                to_try.append(payloads_full_url)
+            for payloaded_url in PayloaderApp.query_generator(parsed_url, payloads):
+                to_try.append(payloaded_url)
             print(f"{ColorObj.information} Generating path payload for: {colored(url, color='cyan')}")
-            for payloads_full_url in PayloaderApp.path_generator(parsed_url, payloads):
-                to_try.append(payloads_full_url)
+            for payloaded_url in PayloaderApp.path_generator(parsed_url, payloads):
+                to_try.append(payloaded_url)
         elif parsed_url.path:
             print(f"{ColorObj.information} Generating path payload for: {colored(url, color='cyan')}")
-            for payloads_full_url in PayloaderApp.path_generator(parsed_url, payloads):
-                to_try.append(payloads_full_url)
+            for payloaded_url in PayloaderApp.path_generator(parsed_url, payloads):
+                to_try.append(payloaded_url)
         elif parsed_url.netloc:
             print(f"{ColorObj.information} Generating netloc payload for: {colored(url, color='cyan')}")
-            for payloads_full_url in PayloaderApp.netloc_generator(parsed_url, payloads):
-               to_try.append(payloads_full_url)
+            for payloaded_url in PayloaderApp.netloc_generator(parsed_url, payloads):
+               to_try.append(payloaded_url)
     except Exception as E:
         print(f"Error {E}, {E.__class__} failed async generator")
 
