@@ -13,11 +13,11 @@ from lib.PayloadGen import PayloadGenerator
 
 parser = ArgumentParser(description=colored("CRLFi Finding Tool", color='yellow'), epilog=colored("Enjoy bug hunting",color='yellow'))
 group = parser.add_mutually_exclusive_group()
-group.add_argument('---', '---', action="store_true", dest="stdin", help="Read from stdin")
-parser.add_argument('-d', '--domain', type=str, help="Domain")
-group.add_argument('-w', '--wordlist', type=str, help="Absolute path of input file")
-parser.add_argument('-oD', '--output-directory', type=str, help="Output file directory")
-parser.add_argument('-t', '--threads', type=int, help="No of threads")
+group.add_argument('---', '---', action="store_true", dest="stdin", help="Stdin")
+group.add_argument('-w', '--wordlist', type=str, help="Wordlist")
+parser.add_argument('-d', '--domain', type=str, help="Domain name")
+parser.add_argument('-oD', '--output-directory', type=str, help="Output directory")
+parser.add_argument('-t', '--threads', type=int, help="Number of threads")
 parser.add_argument('-b', '--banner', action="store_true", help="Print banner and exit")
 argv = parser.parse_args()
 
