@@ -1,8 +1,7 @@
 from re import findall
 from re import search
-from requests import Session
 from termcolor import colored
-from requests.exceptions  import ConnectionError, Timeout
+from faster_than_requests import head
 
 from lib.PathFunctions import PathFunction
 from lib.Globals import ColorObj
@@ -16,7 +15,6 @@ class PayloadGenerator:
         self.ReplacerApp = ParamReplace()
         self.Skipper = Skip()
         self.PathApp = PathFuzz()
-        self.s = Session()
     
     
     def query_generator(self, parsed_url: str, payloads: list) -> list:
@@ -90,15 +88,16 @@ class PayloadGenerator:
                 print(f"{ColorObj.bad} Skipping url {colored(parsed_url.netloc, color='cyan')}!")
                 return ToTry
             try:
-                self.s.get(self.FPathApp.urler(parsed_url.netloc), timeout=6, allow_redirects=True)
-            except ConnectionError:
-                print(f"{ColorObj.bad} Cant connect to {parsed_url.netloc}. Skipping netloc payloads generation")
-                return ToTry
-            except Timeout:
-                print(f"{ColorObj.bad} Connection timeout {parsed_url.netloc}. Skipping netloc payloads generation")
-                return ToTry
+                head(self.FPathApp.urler(parsed_url.netloc), timeout=5000)
             except Exception as E:
-                print(f"{ColorObj.bad} Other connection error in netloc {E},{E.__class__} occured")
+                if str(E.__class__) == "<class 'nimpy.OSError'>":
+                    print("Unrecognized service")
+                    return ToTry
+                elif str(E.__class__) == "<class 'nimpy.TimeoutError'>":
+                    print("Timed out")
+                    return ToTry
+                else:
+                    print(f"{ColorObj.bad} Other connection error in netloc {E},{E.__class__} occured")
             if  self.Skipper.check_netloc(parsed_url.netloc):
                 print(f"{ColorObj.bad} Skipping some used netloc")
                 return ToTry
