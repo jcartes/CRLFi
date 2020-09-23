@@ -24,8 +24,6 @@ argv = parser.parse_args()
 input_wordlist = starter(argv)
 FPathApp = PathFunction()
 PayloaderApp = PayloadGenerator()
-if argv.domain:
-    PayloaderApp.set_error_page(argv.domain)
 
 def async_generator(url: str):
     global to_try

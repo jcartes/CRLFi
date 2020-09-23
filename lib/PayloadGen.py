@@ -17,11 +17,7 @@ class PayloadGenerator:
         self.Skipper = Skip()
         self.PathApp = PathFuzz()
         self.s = Session()
-        self.error = -1
     
-    def set_error_page(self, domain):
-        if domain:
-            self.error = self.netloc_error(domain)
     
     def query_generator(self, parsed_url: str, payloads: list) -> list:
         try:
@@ -93,15 +89,8 @@ class PayloadGenerator:
             if parsed_url.netloc.count('.') >= 5 or len(parsed_url.netloc) > 40:
                 print(f"{ColorObj.bad} Skipping url {colored(parsed_url.netloc, color='cyan')}!")
                 return ToTry
-            netloc_error = self.netloc_error_checker(parsed_url)
-            if netloc_error:
-                print(f"{ColorObj.bad} Skipping url {colored(parsed_url.netloc, color='cyan')} due to error page!")
-                return ToTry
             try:
-                netdata = self.s.get(self.FPathApp.urler(parsed_url.netloc), timeout=6, allow_redirects=True)
-                if netdata.status_code == 404:
-                    if self.error == -1:
-                        self.error = self.netloc_error(parsed_url.netloc)  
+                self.s.get(self.FPathApp.urler(parsed_url.netloc), timeout=6, allow_redirects=True)
             except ConnectionError:
                 print(f"{ColorObj.bad} Cant connect to {parsed_url.netloc}. Skipping netloc payloads generation")
                 return ToTry
@@ -109,49 +98,15 @@ class PayloadGenerator:
                 print(f"{ColorObj.bad} Connection timeout {parsed_url.netloc}. Skipping netloc payloads generation")
                 return ToTry
             except Exception as E:
-                print(f"{ColorObj.bad} Netloc error {E},{E.__class__} occured")
-                pass
+                print(f"{ColorObj.bad} Other connection error in netloc {E},{E.__class__} occured")
             if  self.Skipper.check_netloc(parsed_url.netloc):
                 print(f"{ColorObj.bad} Skipping some used netloc")
                 return ToTry
             else:
                 self.Skipper.add_netloc(parsed_url.netloc)
-
             for payload in payloads:
-                temp_pay = self.FPathApp.urlerslasher(parsed_url.netloc)
-                ToTry.append(self.PathApp.FuzzPath(temp_pay, payload))
+                temp_payload = self.FPathApp.urlerslasher(parsed_url.netloc)
+                ToTry.append(self.PathApp.FuzzPath(temp_payload, payload))
             return ToTry
         except Exception as E:
             print(f"{ColorObj.bad} Exception in Netloc generator: {E},{E.__class__}")
-
-    def netloc_error(self, domain_only: str, skip=False) -> int:
-        try:
-            if not skip:
-                domain = self.FPathApp.slasher(self.FPathApp.urler("psychopath." + domain_only))
-            elif skip:
-                domain = self.FPathApp.slasher(self.FPathApp.urler(domain_only))
-            try: 
-                response = self.s.head(self.FPathApp.slasher(domain), timeout=8, allow_redirects=True)
-            except ConnectionError:
-                return -1
-            if response.status_code == 404:
-                return response.reason
-        except Exception as E:
-            print(E,E.__class__)
-
-    def netloc_error_checker(self, parsed_url: str) -> bool:
-        try:
-            if self.error == -1:
-                return False
-            try:
-                response = self.s.head(self.FPathApp.urlerslasher(parsed_url.netloc), allow_redirects=True, timeout=8)
-            except Exception as E:
-                print(f"{ColorObj.bad} Error {E},{E.__class__} occured. Cant connect")
-                return True
-            if response.status_code == 404:
-                if response.reason == self.error:
-                    return True
-            else:
-                return False
-        except Exception as E:
-            print(f"{E},{E.__class__} in netloc_error_checker")
