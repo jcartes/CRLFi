@@ -5,7 +5,8 @@ from urllib.parse import urlparse
 from argparse import ArgumentParser
 from concurrent.futures import ThreadPoolExecutor
 
-from lib.Functions import request_to_try, starter, ColorObj
+from lib.Functions import request_to_try, starter
+from lib.Functions import ColorObj, write_output
 from lib.Globals import payloads, to_try
 from lib.PathFunctions import PathFunction
 from lib.PayloadGen import PayloadGenerator
@@ -48,31 +49,19 @@ def async_generator(url: str):
     except Exception as E:
         print(f"Error {E}, {E.__class__} failed async generator")
 
-with ThreadPoolExecutor(max_workers=argv.threads) as Mapper:
-    async_generator(argv.domain)
-    try:
+try:
+    with ThreadPoolExecutor(max_workers=argv.threads) as Mapper:
+        async_generator(argv.domain)
         Mapper.map(async_generator, input_wordlist)
-    except KeyboardInterrupt:
-        exit()
-    except Exception as E:
-        print(f"{ColorObj.bad} Error {E},{E.__class__} in Mapper")
 
-with ThreadPoolExecutor(max_workers=argv.threads) as Submitter:
-    try:
+    with ThreadPoolExecutor(max_workers=argv.threads) as Submitter:
         del async_generator
         print(f"{ColorObj.good} Freeing some memory..")
         future_objects = [Submitter.submit(request_to_try, payload_to_try) for payload_to_try in to_try]
-    except KeyboardInterrupt:
-        print(f"{ColorObj.bad} Keyboard Interrupt detected. Aborting")
-        exit()
-    except Exception as E:
-        print(f"{ColorObj.bad} Exception {E},{E.__class__} occured in future object!")
+        if argv.output_directory:
+            write_output(argv.output_directory, argv.domain, future_objects)
+except KeyboardInterrupt:
+    exit()
+except Exception as E:
+    print(E,E.__class__)
 
-#output_file = open(FPathApp.slasher(argv.output_directory) + argv.domain + '.CRLFi', 'a')
-    # for future_object in future_objects:
-        # the_payload, is_exploitable = future_object.result()
-        # if is_exploitable:
-            # print(f"{ColorObj.good} Yes, the url is exploitable;Payload: {the_payload}")
-        # output_file.write("Exploitable:{}, Payload:{}\n".format(is_exploitable, the_payload))
-        # continue
-#     output_file.close()

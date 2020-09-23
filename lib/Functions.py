@@ -5,6 +5,7 @@ from random import randint as rdi
 from requests.exceptions import Timeout
 from requests.exceptions import ConnectionError
 
+from lib.PathFunctions import PathFunction
 from lib.Globals import ColorObj, Headers
 
 def banner():
@@ -33,7 +34,16 @@ def starter(argv):
             return [argv.domain.strip(' ')]
     else:
         return [line.rstrip('\n') for line in open(argv.wordlist)]
-                
+
+def write_output(path, filename, objects):
+    FPathApp = PathFunction()
+    output_file = open(FPathApp.slasher(path) + filename + '.CRLFi', 'a')
+    for future_object in objects:
+        the_payload, is_exploitable = future_object.result()
+        if is_exploitable:
+            print(f"{ColorObj.good} Yes, the url is exploitable\t,Payload: {the_payload}")
+        output_file.write("Exploitable:{}, Payload:{}\n".format(is_exploitable, the_payload))
+    return output_file.close()     
 
 def request_to_try(url: str) -> tuple:
     print(f"{ColorObj.information} Trying {colored(url, color='cyan')} against web server!")
@@ -105,7 +115,7 @@ def request_to_try(url: str) -> tuple:
         print(f"{ColorObj.other} www already exist in: {url}")
         return url, False
     if url.count('.') >= 2:
-        print(f"{ColorObj.other} Skipping www for url: {url}")
+        print(f"{ColorObj.other} Skipping {colored('www', color='cyan')} for url: {url}")
         return url, False
     try:
         ssl_url = None
