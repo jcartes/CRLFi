@@ -30,18 +30,17 @@ Enjoy bug hunting
 ```
 
 ## Example
-Scan a single URLs  
-* ```CRLFi -w <(echo 'google.com') -oD `pwd` -t 1 -d google.com```  
-Scan from URLs  
-* ```CRLFi -w /tmp/files.txt -oD `pwd` -t 10 -d anydomainnameinfiles.txt.com```  
+1. Scan a single URL  
+* ```CRLFi -d google.com```  
+2. Scan URLs from wordlist
+* ```CRLFi -w /path/to/wordlist -oD `pwd` -t 10 -d domain.com```  
+3. Scan from stdin
+* ```assetfinder yahoo.com | CRLFi --- -t 10```
+
 
 ## Caveats
 1. Nothing. If you think there is feel free to raise issue.
 
 ## FAQ
 1. Does CRLF injection only affect HTTP/1?  
-<<<<<<< HEAD
-* Well, no. I found CRLF injection on 2 different HTTP/2 enabled website using this tool and confirmed with curl with `--http2` in curl. Also my question: [CRLF injection in HTTP2](https://security.stackexchange.com/questions/235046/does-http-2-prevent-security-vulnerabilites-like-crlf-injection)
-=======
 * Well, no. I found CRLF injection on 2 http/2 enabled website with http2. Also checkout this: [CRLF injection in HTTP2](https://security.stackexchange.com/questions/235046/does-http-2-prevent-security-vulnerabilites-like-crlf-injection)
->>>>>>> parent of 00220c8... 11:56:37 PM 09/12/2020
