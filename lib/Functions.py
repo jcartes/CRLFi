@@ -22,7 +22,7 @@ def starter(argv):
                 print("{} Output directory specified but not domain".format(ColorObj.bad))
                 exit()
     if not argv.wordlist:
-        if not domain:
+        if not argv.domain:
             if not argv.stdin:
                 print("{} Use --help".format(ColorObj.bad))
                 exit()
@@ -102,10 +102,10 @@ def request_to_try(url: str) -> tuple:
     if isReturnable:
         return ssl_url, True 
     if 'www.' in ssl_url:
-        print(f"{ColorObj.other} www already exist in url {url}")
+        print(f"{ColorObj.other} www already exist in: {url}")
         return url, False
     if url.count('.') >= 2:
-        print(f"{ColorObj.other} Skipping www for subdomain {url}")
+        print(f"{ColorObj.other} Skipping www for url: {url}")
         return url, False
     try:
         ssl_url = None

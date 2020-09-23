@@ -17,6 +17,7 @@ class PayloadGenerator:
         self.Skipper = Skip()
         self.PathApp = PathFuzz()
         self.s = Session()
+        self.error = -1
     
     def set_error_page(self, domain):
         if domain:
@@ -153,4 +154,4 @@ class PayloadGenerator:
             else:
                 return False
         except Exception as E:
-            print(E,E.__class__)
+            print(f"{E},{E.__class__} in netloc_error_checker")

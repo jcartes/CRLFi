@@ -25,7 +25,6 @@ FPathApp = PathFunction()
 PayloaderApp = PayloadGenerator()
 if argv.domain:
     PayloaderApp.set_error_page(argv.domain)
-#input_wordlist = [line.rstrip('\n') for line in open(argv.wordlist)]
 
 def async_generator(url: str):
     global to_try
