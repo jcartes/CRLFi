@@ -10,18 +10,19 @@ Semi Automated CRLF injection scanner with concurrency. Scans for CRLF injection
 
 ## Usage
 ```
-usage: CRLFi [-h] [-w WORDLIST] [-oD OUTPUT_DIRECTORY] [-d DOMAIN] [-t THREADS] [-b]
+usage: CRLFi [-h] [---] [-d DOMAIN] [-w WORDLIST] [-oD OUTPUT_DIRECTORY] [-t THREADS] [-b]
 
 CRLFi Finding Tool
 
 optional arguments:
   -h, --help            show this help message and exit
+  ---, ---              Read from stdin
+  -d DOMAIN, --domain DOMAIN
+                        Domain
   -w WORDLIST, --wordlist WORDLIST
                         Absolute path of input file
   -oD OUTPUT_DIRECTORY, --output-directory OUTPUT_DIRECTORY
                         Output file directory
-  -d DOMAIN, --domain DOMAIN
-                        Domain name
   -t THREADS, --threads THREADS
                         No of threads
   -b, --banner          Print banner and exit

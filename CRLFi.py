@@ -53,7 +53,7 @@ try:
         Mapper.map(async_generator, input_wordlist)
 
     with ThreadPoolExecutor(max_workers=argv.threads) as Submitter:
-        del PayloaderApp async_generator;
+        del PayloaderApp; del async_generator;
         print(f"{ColorObj.good} Freeing some memory..")
         future_objects = [Submitter.submit(request_to_try, payload_to_try) for payload_to_try in to_try]
         if argv.output_directory:
