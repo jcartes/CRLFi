@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+
 from termcolor import colored
 from urllib.parse import urlparse
 from argparse import ArgumentParser
@@ -64,7 +65,7 @@ with ThreadPoolExecutor(max_workers=argv.threads) as Submitter:
         f.write(E,E.__class__)
         f.close()
     try:
-        future_objects = [Submitter.submit(request_to_try, triable) for triable in to_try]
+        future_objects = [Submitter.submit(request_to_try, payload_to_try) for payload_to_try in to_try]
     except KeyboardInterrupt:
         print(f"{ColorObj.bad} Keyboard Interrupt Detected. Aborting")
         exit()
