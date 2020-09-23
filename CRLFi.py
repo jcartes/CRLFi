@@ -57,8 +57,7 @@ with ThreadPoolExecutor(max_workers=argv.threads) as Mapper:
 with ThreadPoolExecutor(max_workers=argv.threads) as Submitter:
     try:
         print(f"{ColorObj.good} Freeing some memory..")
-        del input_wordlist;del async_generator;del FPathApp;del PayloaderApp;del starter;del urlparse;del PathFunction;del PayloadGenerator
-        del ArgumentParser;del argv;del parser;del payloads
+        del async_generator
     except Exception as E:
         print(E,E.__class__)
         f = open('/var/log/CRLFi', 'a')
