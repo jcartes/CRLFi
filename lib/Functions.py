@@ -1,10 +1,11 @@
+from sys import stdin
 from requests import Session   
 from termcolor import colored
 from random import randint as rdi
 from requests.exceptions import Timeout
 from requests.exceptions import ConnectionError
 
-from lib.Globals import ColorObj, UA
+from lib.Globals import ColorObj, Headers
 
 def banner():
     from pyfiglet import print_figlet as puff
@@ -18,12 +19,21 @@ def starter(argv):
         exit(0)
     if argv.output_directory:
         if not argv.domain:
-            print("{} Output directory specified but not domain".format(ColorObj.bad))
-            exit()
+                print("{} Output directory specified but not domain".format(ColorObj.bad))
+                exit()
     if not argv.domain:
         if not argv.wordlist or not argv.output_directory:
-            print("{} Use --help".format(ColorObj.bad))
-            exit()
+            if not argv.stdin:
+                print("{} Use --help".format(ColorObj.bad))
+                exit()
+            else:
+                stdinarray = stdin.read().split('\n')
+                return [line.rstrip('\n').strip(' ') for line in stdinarray if line]
+        else:
+            return [line.rstrip('\n') for line in open(argv.wordlist) if line]
+    else:
+        return [argv.domain.strip(' ')]
+                
 
 def request_to_try(url: str) -> tuple:
     print(f"{ColorObj.information} Trying {colored(url, color='cyan')} against web server!")
@@ -33,7 +43,7 @@ def request_to_try(url: str) -> tuple:
         if rdi(0,1) == 0:
             response = s.get(url, timeout=8)
         elif rdi(0,1) == 1:
-            response = s.head(url, timeout=8, headers=UA)
+            response = s.head(url, timeout=8, headers=Headers)
         else:
             response = s.head(url, timeout=8)
     except ConnectionError:
@@ -64,7 +74,7 @@ def request_to_try(url: str) -> tuple:
     print(f"{ColorObj.information} Trying {colored(ssl_url, color='cyan')} against web server!")
     try:
         if rdi(0,1) == 0:
-            response = s.get(ssl_url, timeout=8, headers=UA)
+            response = s.get(ssl_url, timeout=8, headers=Headers)
         elif rdi(0,1) == 1:
             response = s.head(ssl_url, timeout=8)
         else:
@@ -108,7 +118,7 @@ def request_to_try(url: str) -> tuple:
             if rdi(0,1) == 0:
                 response = s.get(www_url, timeout=8)
             else:
-                response = s.head(www_url, timeout=8, headers=UA)
+                response = s.head(www_url, timeout=8, headers=Headers)
         except ConnectionError:
             print(f"{ColorObj.bad} Cant connect to url: {www_url}")
             return www_url, False

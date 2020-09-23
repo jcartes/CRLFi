@@ -11,18 +11,22 @@ from lib.PathFunctions import PathFunction
 from lib.PayloadGen import PayloadGenerator
 
 parser = ArgumentParser(description=colored("CRLFi Finding Tool", color='yellow'), epilog=colored("Enjoy bug hunting",color='yellow'))
-parser.add_argument('-w', '--wordlist', type=str, help="Absolute path of input file")
+group = parser.add_mutually_exclusive_group()
+group.add_argument('---', '---', action="store_true", dest="stdin", help="Read from stdin")
+parser.add_argument('-d', '--domain', type=str, help="Domain")
+group.add_argument('-w', '--wordlist', type=str, help="Absolute path of input file")
 parser.add_argument('-oD', '--output-directory', type=str, help="Output file directory")
-parser.add_argument('-d', '--domain', type=str, help="Domain name")
 parser.add_argument('-t', '--threads', type=int, help="No of threads")
 parser.add_argument('-b', '--banner', action="store_true", help="Print banner and exit")
 argv = parser.parse_args()
 
-starter(argv)
+input_wordlist = starter(argv)
 FPathApp = PathFunction()
-PayloaderApp = PayloadGenerator(argv.domain)
-input_wordlist = [line.rstrip('\n') for line in open(argv.wordlist)]
-output_file = open(FPathApp.slasher(argv.output_directory) + argv.domain + '.CRLFi', 'a')
+PayloaderApp = PayloadGenerator()
+if argv.domain:
+    PayloaderApp.set_error_page(argv.domain)
+#input_wordlist = [line.rstrip('\n') for line in open(argv.wordlist)]
+#output_file = open(FPathApp.slasher(argv.output_directory) + argv.domain + '.CRLFi', 'a')
 
 def async_generator(url: str):
     global to_try
@@ -57,25 +61,19 @@ with ThreadPoolExecutor(max_workers=argv.threads) as Mapper:
 
 with ThreadPoolExecutor(max_workers=argv.threads) as Submitter:
     try:
-        print(f"{ColorObj.good} Freeing some memory..")
         del async_generator
-    except Exception as E:
-        print(E,E.__class__)
-        f = open('/var/log/CRLFi', 'a')
-        f.write(E,E.__class__)
-        f.close()
-    try:
+        print(f"{ColorObj.good} Freeing some memory..")
         future_objects = [Submitter.submit(request_to_try, payload_to_try) for payload_to_try in to_try]
     except KeyboardInterrupt:
-        print(f"{ColorObj.bad} Keyboard Interrupt Detected. Aborting")
+        print(f"{ColorObj.bad} Keyboard Interrupt detected. Aborting")
         exit()
     except Exception as E:
-        print(f"{ColorObj.bad} Exception {E},{E.__class__} occured")
+        print(f"{ColorObj.bad} Exception {E},{E.__class__} occured in future object!")
 
-    for future_object in future_objects:
-        the_payload, is_exploitable = future_object.result()
-        if is_exploitable:
-            print(f"{ColorObj.good} Yes, the url is exploitable;Payload: {the_payload}")
-        output_file.write("Exploitable:{}, Payload:{}\n".format(is_exploitable, the_payload))
-        continue
-    output_file.close()
+    # for future_object in future_objects:
+        # the_payload, is_exploitable = future_object.result()
+        # if is_exploitable:
+            # print(f"{ColorObj.good} Yes, the url is exploitable;Payload: {the_payload}")
+        # output_file.write("Exploitable:{}, Payload:{}\n".format(is_exploitable, the_payload))
+        # continue
+#     output_file.close()

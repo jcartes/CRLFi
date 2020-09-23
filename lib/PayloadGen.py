@@ -1,8 +1,8 @@
 from re import findall,search
 from requests import Session
-from requests.exceptions  import ConnectionError, Timeout
 from termcolor import colored
 from random import randint as rdi
+from requests.exceptions  import ConnectionError, Timeout
 
 from lib.PathFunctions import PathFunction
 from lib.Globals import ColorObj
@@ -11,14 +11,16 @@ from lib.PathFuzzer import PathFuzz
 from lib.Skipper import Skip
 
 class PayloadGenerator:
-    def __init__(self, domain: str):
+    def __init__(self):
         self.FPathApp = PathFunction()
         self.ReplacerApp = ParamReplace()
         self.Skipper = Skip()
         self.PathApp = PathFuzz()
         self.s = Session()
-        self.error = self.netloc_error(domain)
-        print(f"{ColorObj.other} Error number for {colored(domain, color='cyan')} is: {colored(self.error, color='red')}")
+    
+    def set_error_page(self, domain):
+        if domain:
+            self.error = self.netloc_error(domain)
     
     def query_generator(self, parsed_url: str, payloads: list) -> list:
         try:
@@ -130,7 +132,6 @@ class PayloadGenerator:
             try: 
                 response = self.s.head(self.FPathApp.slasher(domain), timeout=8, allow_redirects=True)
             except ConnectionError:
-                print(f"{ColorObj.other} Cant determine error page!")
                 return -1
             if response.status_code == 404:
                 return response.reason
