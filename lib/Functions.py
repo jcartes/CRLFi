@@ -16,9 +16,14 @@ def starter(argv):
     if argv.banner:
         banner()
         exit(0)
-    if not argv.wordlist or not argv.domain or not argv.output_directory:
-        print("{} Use --help".format(ColorObj.bad))
-        exit()
+    if argv.output_directory:
+        if not argv.domain:
+            print("{} Output directory specified but not domain".format(ColorObj.bad))
+            exit()
+    if not argv.domain:
+        if not argv.wordlist or not argv.output_directory:
+            print("{} Use --help".format(ColorObj.bad))
+            exit()
 
 def request_to_try(url: str) -> tuple:
     print(f"{ColorObj.information} Trying {colored(url, color='cyan')} against web server!")
