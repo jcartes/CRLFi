@@ -6,17 +6,20 @@ from argparse import ArgumentParser
 from concurrent.futures import ThreadPoolExecutor
 
 from lib.Functions import request_to_try, starter
-from lib.Functions import ColorObj, write_output
+from lib.Functions import ColorObj
+from lib.Functions import write_output_directory, write_output
 from lib.Globals import payloads, to_try
 from lib.PathFunctions import PathFunction
 from lib.PayloadGen import PayloadGenerator
 
-parser = ArgumentParser(description=colored("CRLFi Finding Tool", color='yellow'), epilog=colored("Enjoy bug hunting",color='yellow'))
-group = parser.add_mutually_exclusive_group()
-group.add_argument('---', '---', action="store_true", dest="stdin", help="Stdin")
-group.add_argument('-w', '--wordlist', type=str, help="Wordlist")
+parser = ArgumentParser(description=colored("CRLFi Scanner", color='yellow'), epilog=colored("Enjoy bug hunting",color='yellow'))
+input_group = parser.add_mutually_exclusive_group()
+output_group = parser.add_mutually_exclusive_group()
+input_group.add_argument('---', '---', action="store_true", dest="stdin", help="Stdin")
+input_group.add_argument('-w', '--wordlist', type=str, help="Wordlist")
 parser.add_argument('-d', '--domain', type=str, help="Domain name")
-parser.add_argument('-oD', '--output-directory', type=str, help="Output directory")
+output_group.add_argument('-o', '--output', type=str, help="Output file")
+output_group.add_argument('-oD', '--output-directory', type=str, help="Output directory")
 parser.add_argument('-t', '--threads', type=int, help="Number of threads")
 parser.add_argument('-b', '--banner', action="store_true", help="Print banner and exit")
 argv = parser.parse_args()
@@ -57,7 +60,9 @@ try:
         print(f"{ColorObj.good} Freeing some memory..")
         future_objects = [Submitter.submit(request_to_try, payload_to_try) for payload_to_try in to_try]
         if argv.output_directory:
-            write_output(argv.output_directory, argv.domain, future_objects)
+            write_output_directory(argv.output_directory, argv.domain, future_objects)
+        if argv.output:
+            write_output(argv.output, future_objects)
 except KeyboardInterrupt:
     exit()
 except Exception as E:
