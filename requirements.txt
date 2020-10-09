@@ -1,0 +1,4 @@
+argparse
+requests
+termcolor
+faster_than_requests
