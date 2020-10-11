@@ -3,10 +3,10 @@
 Semi Automated CRLF injection scanner with concurrency. Scans for CRLF injection in parameters, paths and netlocs.
 
 ## Features
-1. Automatic scanning of CRLF injection in parallel.
-2. Define your own payloads in lib/Globals.py.
+1. Automatic and concurrent scanning of CRLF injections.
+2. Define your own payloads in lib/Globals.py as well as huge list of predefined payloads.
 3. Scans for CRLF injection in parameters, paths and netlocs.
-4. Nice UI and automatically skips same looking parameters and paths.
+4. Printing feels nice and automatically skips same looking parameters, paths and domains.
 
 ## Usage
 ```
