@@ -9,10 +9,9 @@ from lib.PathFunctions import PathFunction
 from lib.Globals import ColorObj, Headers
 
 def banner():
-    from pyfiglet import print_figlet as puff
-    puff('CRLF Injector', font='larry3d', colors='BLUE')
-    print(colored('A smart CRLF Injector, which can inject CRLF in path, parameter and netloc!', color='red', attrs=['bold']))
-    print(colored('It intelligently fuzzes in parameters and path', color='red', attrs=['bold']))
+    banner = '\x1b[5m\x1b[1m\x1b[40m\x1b[31m   __________  __    _______ \n  / ____/ __ \\/ /   / ____(_)\n / /   / /_/ / /   / /_  / / \n/ /___/ _, _/ /___/ __/ / /  \n\\____/_/ |_/_____/_/   /_/   \n                             \n\x1b[0m'
+    print(banner)
+    print(colored('Intelligent CRLFi Hunter', color='red', attrs=['bold']))
 
 def starter(argv):
     if argv.banner:
