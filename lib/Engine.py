@@ -18,11 +18,10 @@ class PayloadGenerator:
     
     def query_generator(self, parsed_url: str, payloads: list) -> list:
         try:
-            NotTried, ToTry = [], []
-            upto_path = self.FPathApp.urlerslasher(parsed_url.netloc) + self.FPathApp.payloader(parsed_url.path) 
-            query = parsed_url.query
+            parameters_to_try, payloads_to_try = [], []
+            upto_path, query = self.FPathApp.urlerslasher(parsed_url.netloc) + self.FPathApp.payloader(parsed_url.path), parsed_url.query
             if len(query) > 550:
-                return ToTry
+                return payloads_to_try
             parameters, values = self.ReplacerApp.expand_parameter(query)
             for parameter in parameters:
                 if not self.Skipper.check_parameter(upto_path, parameter):
@@ -35,25 +34,25 @@ class PayloadGenerator:
                 else:
                     print(f"{ColorObj.bad} Skipping some largely used parameters.")
                     continue
-                NotTried.append(parameter)
-            if not len(NotTried):
-                return ToTry
+                parameters_to_try.append(parameter)
+            if not len(parameters_to_try):
+                return payloads_to_try
             for payload in payloads:
-                query_list = self.ReplacerApp.only_replacement(parameters, values, self.FPathApp.payloader(payload), NotTried)
+                query_list = self.ReplacerApp.only_replacement(parameters, values, self.FPathApp.payloader(payload), parameters_to_try)
                 PayloadsList = self.ReplacerApp.gen_url(upto_path, query_list)
-                [ToTry.append(TriablePayloads) for TriablePayloads in PayloadsList]
-            return ToTry
+                [payloads_to_try.append(TriablePayloads) for TriablePayloads in PayloadsList]
+            return payloads_to_try
         except Exception as E:
             print(f"{ColorObj.bad} Exception in Query generator: {E},{E.__class__}")
 
     def path_generator(self, parsed_url: str, payloads: list) -> list:
         try:
-            ToTry = []
+            payloads_to_try = []
             upto_path = self.FPathApp.urlerslasher(parsed_url.netloc)
             if parsed_url.path == '/' or len(parsed_url.path) == 1:
                 PayloadsList = self.netloc_generator(parsed_url, payloads)
-                ToTry = [payloads for payloads in PayloadsList]
-                return ToTry
+                payloads_to_try = [payloads for payloads in PayloadsList]
+                return payloads_to_try
             else:
                 PathList = [str(path + '/') for path in findall(r'([^/]+)', parsed_url.path)]
                 PathListLen = len(PathList) -1 
@@ -62,49 +61,49 @@ class PayloadGenerator:
                     unslashed = self.FPathApp.unslasher(PathList[i-1])
                     if self.Skipper.check_path(PathList[i-1]):
                         print(f"{ColorObj.bad} Skipping some used paths.")
-                        return ToTry
+                        return payloads_to_try
                     elif search('[a-zA-Z].+[0-9]$', unslashed):
                         print(f"{ColorObj.bad} Skipping some numbered paths.")
-                        return ToTry
+                        return payloads_to_try
                     elif search('^[0-9].*$', unslashed) and len(unslashed) >= 2:
                         print(f"{ColorObj.bad} Skipping some more more numbered paths.")
-                        return ToTry
+                        return payloads_to_try
                     elif not self.Skipper.check_path(PathList[i-1]):
                         self.Skipper.add_path(PathList[i-1])    
                     for payload in payloads:
                         PathList[i] = self.FPathApp.payloader(payload)
                         path_payload = upto_path + "".join(PathList)
-                        ToTry.append(path_payload)
+                        payloads_to_try.append(path_payload)
                     PathList.pop()
-                return ToTry
+                return payloads_to_try
         except Exception as E:
             print(f"{ColorObj.bad} Exception in Path generator: {E},{E.__class__}")
 
     def netloc_generator(self, parsed_url: str, payloads: list) -> list:
         try:
-            ToTry = []
+            payloads_to_try = []
             if parsed_url.netloc.count('.') >= 5 or len(parsed_url.netloc) > 40:
                 print(f"{ColorObj.bad} Skipping url {colored(parsed_url.netloc, color='cyan')}!")
-                return ToTry
+                return payloads_to_try
             try:
                 head(self.FPathApp.urler(parsed_url.netloc), timeout=5000)
             except Exception as E:
                 if str(E.__class__) == "<class 'nimpy.OSError'>":
                     print("{ColorObj.bad} Could not connect! {E}, {E.__class__} occured")
-                    return ToTry
+                    return payloads_to_try
                 elif str(E.__class__) == "<class 'nimpy.TimeoutError'>":
                     print("{ColorObj.bad Timed out.Error occured: {E}")
-                    return ToTry
+                    return payloads_to_try
                 else:
                     print(f"{ColorObj.bad} Other connection error in netloc {E},{E.__class__} occured")
             if  self.Skipper.check_netloc(parsed_url.netloc):
                 print(f"{ColorObj.bad} Skipping some used netloc")
-                return ToTry
+                return payloads_to_try
             else:
                 self.Skipper.add_netloc(parsed_url.netloc)
             for payload in payloads:
                 temp_payload = self.FPathApp.urlerslasher(parsed_url.netloc)
-                ToTry.append(self.PathApp.FuzzPath(temp_payload, payload))
-            return ToTry
+                payloads_to_try.append(self.PathApp.FuzzPath(temp_payload, payload))
+            return payloads_to_try
         except Exception as E:
             print(f"{ColorObj.bad} Exception in Netloc generator: {E},{E.__class__}")

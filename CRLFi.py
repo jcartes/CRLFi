@@ -10,7 +10,7 @@ from lib.Functions import ColorObj
 from lib.Functions import write_output_directory, write_output
 from lib.Globals import payloads, to_try
 from lib.PathFunctions import PathFunction
-from lib.PayloadGen import PayloadGenerator
+from lib.Engine import PayloadGenerator
 
 parser = ArgumentParser(description=colored("CRLFi Scanner", color='yellow'), epilog=colored("Enjoy bug hunting",color='yellow'))
 input_group = parser.add_mutually_exclusive_group()
