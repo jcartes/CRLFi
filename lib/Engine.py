@@ -6,20 +6,18 @@ from faster_than_requests import head
 from lib.PathFunctions import PathFunction
 from lib.Globals import ColorObj
 from lib.ParamReplacer import ParamReplace
-from lib.PathFuzzer import PathFuzz
 from lib.Skipper import Skip
 
 class PayloadGenerator:
     def __init__(self):
-        self.FPathApp = PathFunction()
+        self.path_fn = PathFunction()
         self.ReplacerApp = ParamReplace()
         self.Skipper = Skip()
-        self.PathApp = PathFuzz()
     
     def query_generator(self, parsed_url: str, payloads: list) -> list:
         try:
             parameters_to_try, payloads_to_try = [], []
-            upto_path, query = self.FPathApp.urlerslasher(parsed_url.netloc) + self.FPathApp.payloader(parsed_url.path), parsed_url.query
+            upto_path, query = self.path_fn.urlerslasher(parsed_url.netloc) + self.path_fn.payloader(parsed_url.path), parsed_url.query
             if len(query) > 550:
                 return payloads_to_try
             parameters, values = self.ReplacerApp.expand_parameter(query)
@@ -38,7 +36,7 @@ class PayloadGenerator:
             if not len(parameters_to_try):
                 return payloads_to_try
             for payload in payloads:
-                query_list = self.ReplacerApp.only_replacement(parameters, values, self.FPathApp.payloader(payload), parameters_to_try)
+                query_list = self.ReplacerApp.only_replacement(parameters, values, self.path_fn.payloader(payload), parameters_to_try)
                 PayloadsList = self.ReplacerApp.gen_url(upto_path, query_list)
                 [payloads_to_try.append(TriablePayloads) for TriablePayloads in PayloadsList]
             return payloads_to_try
@@ -48,7 +46,7 @@ class PayloadGenerator:
     def path_generator(self, parsed_url: str, payloads: list) -> list:
         try:
             payloads_to_try = []
-            upto_path = self.FPathApp.urlerslasher(parsed_url.netloc)
+            upto_path = self.path_fn.urlerslasher(parsed_url.netloc)
             if parsed_url.path == '/' or len(parsed_url.path) == 1:
                 PayloadsList = self.netloc_generator(parsed_url, payloads)
                 payloads_to_try = [payloads for payloads in PayloadsList]
@@ -58,7 +56,7 @@ class PayloadGenerator:
                 PathListLen = len(PathList) -1 
                 PathListRange = range(PathListLen, 0, -1)
                 for i in PathListRange:
-                    unslashed = self.FPathApp.unslasher(PathList[i-1])
+                    unslashed = self.path_fn.unslasher(PathList[i-1])
                     if self.Skipper.check_path(PathList[i-1]):
                         print(f"{ColorObj.bad} Skipping some used paths.")
                         return payloads_to_try
@@ -71,7 +69,7 @@ class PayloadGenerator:
                     elif not self.Skipper.check_path(PathList[i-1]):
                         self.Skipper.add_path(PathList[i-1])    
                     for payload in payloads:
-                        PathList[i] = self.FPathApp.payloader(payload)
+                        PathList[i] = self.path_fn.payloader(payload)
                         path_payload = upto_path + "".join(PathList)
                         payloads_to_try.append(path_payload)
                     PathList.pop()
@@ -86,7 +84,7 @@ class PayloadGenerator:
                 print(f"{ColorObj.bad} Skipping url {colored(parsed_url.netloc, color='cyan')}!")
                 return payloads_to_try
             try:
-                head(self.FPathApp.urler(parsed_url.netloc), timeout=5000)
+                head(self.path_fn.urler(parsed_url.netloc), timeout=5000)
             except Exception as E:
                 if str(E.__class__) == "<class 'nimpy.OSError'>":
                     print("{ColorObj.bad} Could not connect! {E}, {E.__class__} occured")
@@ -102,8 +100,8 @@ class PayloadGenerator:
             else:
                 self.Skipper.add_netloc(parsed_url.netloc)
             for payload in payloads:
-                temp_payload = self.FPathApp.urlerslasher(parsed_url.netloc)
-                payloads_to_try.append(self.PathApp.FuzzPath(temp_payload, payload))
+                temp_payload = self.path_fn.urlerslasher(parsed_url.netloc)
+                payloads_to_try.append(self.path_fn.merge(temp_payload, payload))
             return payloads_to_try
         except Exception as E:
             print(f"{ColorObj.bad} Exception in Netloc generator: {E},{E.__class__}")

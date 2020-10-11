@@ -25,12 +25,12 @@ parser.add_argument('-b', '--banner', action="store_true", help="Print banner an
 argv = parser.parse_args()
 
 input_wordlist = starter(argv)
-FPathApp = PathFunction()
+path_fn = PathFunction()
 PayloaderApp = PayloadGenerator()
 
 def async_generator(url: str):
     global to_try
-    parsed_url = urlparse(FPathApp.urler(url))
+    parsed_url = urlparse(path_fn.urler(url))
     try:
         if parsed_url.query:
             print(f"{ColorObj.information} Generating query payload for: {colored(url, color='cyan')}")

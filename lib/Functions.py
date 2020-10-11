@@ -36,8 +36,8 @@ def starter(argv):
         return [line.rstrip('\n') for line in open(argv.wordlist)]
 
 def write_output_directory(path, filename, objects):
-    FPathApp = PathFunction()
-    output_file = open(FPathApp.slasher(path) + filename + '.CRLFi', 'a')
+    path_fn = PathFunction()
+    output_file = open(path_fn.slasher(path) + filename + '.CRLFi', 'a')
     for future_object in objects:
         the_payload, is_exploitable = future_object.result()
         if is_exploitable:

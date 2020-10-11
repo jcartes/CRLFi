@@ -6,7 +6,7 @@ class Skip:
         self.parameter_list = dict()
         self.unique_parameter_list = dict()
         self.exist = False        
-        self.FPathApp = PathFunction()
+        self.path_fn = PathFunction()
 
     def add_path(self, path_to_add: str) -> bool:
             if path_to_add in self.path_list:
@@ -16,7 +16,7 @@ class Skip:
                 return True
 
     def add_parameter(self, url: str, parameter_list: list):
-        url = self.FPathApp.questioner(url)
+        url = self.path_fn.questioner(url)
         if url in self.parameter_list:
              var = self.parameter_list[url]
              var.update(set(parameter_list))
@@ -53,7 +53,7 @@ class Skip:
             return False
 
     def check_parameter(self, url: str, parameter: str):
-        url = self.FPathApp.questioner(url)
+        url = self.path_fn.questioner(url)
         try:
             if self.parameter_list[url]:
                 self.exist = True
