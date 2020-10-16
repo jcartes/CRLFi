@@ -36,7 +36,7 @@ def starter(argv):
 
 def write_output_directory(path, filename, objects):
     path_fn = PathFunction()
-    output_file = open(path_fn.slasher(path) + filename + '.CRLFi', 'a')
+    output_file = open(path_fn.ender(path, '/') + filename + '.CRLFi', 'a')
     for future_object in objects:
         the_payload, is_exploitable = future_object.result()
         if is_exploitable:

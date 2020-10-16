@@ -56,7 +56,7 @@ class PayloadGenerator:
                 PathListLen = len(PathList) -1 
                 PathListRange = range(PathListLen, 0, -1)
                 for i in PathListRange:
-                    unslashed = self.path_fn.unslasher(PathList[i-1])
+                    unslashed = self.path_fn.unender(PathList[i-1], '/')
                     if self.Skipper.check_path(PathList[i-1]):
                         print(f"{ColorObj.bad} Skipping some used paths.")
                         return payloads_to_try
