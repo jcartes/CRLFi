@@ -6,7 +6,7 @@ class Skip:
         self.path_list = []
         self.netloc_list = []
         self.parameter_list = {}
-        self.unique_parameter_list = {}
+        self.uparameter_list = {}
         self.path_fn = PathFunction()
 
     def add_path(self, path_to_add: str) -> bool:
@@ -28,10 +28,10 @@ class Skip:
     
     def add_unique_parameter(self, parameter_list: list) -> bool:
         for parameter in parameter_list:
-            if not parameter in self.unique_parameter_list:
-                self.unique_parameter_list[parameter] = 0
+            if not parameter in self.uparameter_list:
+                self.uparameter_list[parameter] = 0
             else:
-                self.unique_parameter_list[parameter] += 1
+                self.uparameter_list[parameter] += 1
         return True
  
     def add_netloc(self, netloc: str) -> bool:
@@ -41,19 +41,19 @@ class Skip:
             self.netloc_list.append(netloc)
             return True
 
-    def check_path(self, path_to_add: str) -> bool:
+    def check_path(self, path_to_add: str) -> bool: #return True if found
         if path_to_add in self.path_list:
             return True
         else:
             return False
 
-    def check_netloc(self, netloc: str) -> bool:
+    def check_netloc(self, netloc: str) -> bool: #return True if found
         if netloc in self.netloc_list:
             return True
         else:
             return False
 
-    def check_parameter(self, url: str, parameter: str):
+    def check_parameter(self, url: str, parameter: str) -> bool: #return True if found
         url = self.path_fn.ender(url, '?')
         try:
             if self.parameter_list[url]:
@@ -61,16 +61,14 @@ class Skip:
         except:
             self.exist = False
         if self.exist:
-            parameters_list = self.parameter_list[url]
-            for param in parameters_list:
-                if parameter == param:
+            for self_parameter in self.parameter_list[url]:
+                if self_parameter == parameter:
                     return True
         return False
 
     def check_unique_parameter(self, parameter: str):
-        if not parameter in self.unique_parameter_list:
+        if not parameter in self.uparameter_list:
             return False
-        if self.unique_parameter_list[parameter] >= 75:
-            return True
-        else:
+        if self.uparameter_list[parameter] >= 75:
             return False
+        return True

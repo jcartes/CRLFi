@@ -39,7 +39,7 @@ class ParamReplace:
         return x_counter
 
 
-    def gen_url(self, half_url: str, xdata: str) -> list:
+    def generate_url(self, half_url: str, xdata: str) -> list:
         returner_list = []
         for each in xdata:
             if half_url[-1] != "?":
