@@ -1,22 +1,23 @@
 from lib.PathFunctions import PathFunction
+
 class Skip:
     def __init__(self):
-        self.path_list = list()
+        self.exist = False 
+        self.path_list = []
         self.netloc_list = []
-        self.parameter_list = dict()
-        self.unique_parameter_list = dict()
-        self.exist = False        
+        self.parameter_list = {}
+        self.unique_parameter_list = {}
         self.path_fn = PathFunction()
 
     def add_path(self, path_to_add: str) -> bool:
-            if path_to_add in self.path_list:
-                return False
-            else:
-                self.path_list.append(path_to_add)
-                return True
+        if path_to_add in self.path_list:
+            return False
+        else:
+            self.path_list.append(path_to_add)
+            return True
 
-    def add_parameter(self, url: str, parameter_list: list):
-        url = self.path_fn.questioner(url)
+    def add_parameter(self, url: str, parameter_list: list) -> list:
+        url = self.path_fn.ender(url, '?')
         if url in self.parameter_list:
              var = self.parameter_list[url]
              var.update(set(parameter_list))
@@ -25,7 +26,7 @@ class Skip:
              self.parameter_list[url] = set(parameter_list)
         return self.parameter_list[url] 
     
-    def add_unique_parameter(self, parameter_list: list):
+    def add_unique_parameter(self, parameter_list: list) -> bool:
         for parameter in parameter_list:
             if not parameter in self.unique_parameter_list:
                 self.unique_parameter_list[parameter] = 0
@@ -53,7 +54,7 @@ class Skip:
             return False
 
     def check_parameter(self, url: str, parameter: str):
-        url = self.path_fn.questioner(url)
+        url = self.path_fn.ender(url, '?')
         try:
             if self.parameter_list[url]:
                 self.exist = True
