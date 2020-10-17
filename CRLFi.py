@@ -61,12 +61,12 @@ try:
 
     with ThreadPoolExecutor(max_workers=argv.threads) as Submitter:
         future_objects = [Submitter.submit(Sender.send_function, payload_to_try) for payload_to_try in to_try]
-        def output_write(future_objects):
+        def owrite(future_objects):
             if argv.output_directory:
-                write_output_directory(argv.output_directory, argv.domain, future_objects)
+                write_output_directory(future_objects, filename = argv.domain, path = argv.output_directory)
             if argv.output:
-                write_output(argv.output, future_objects)
-        output_write(future_objects)
+                write_output(future_objects, filename = argv.output)
+        owrite(future_objects)
 except KeyboardInterrupt:
     exit()
 except Exception as E:

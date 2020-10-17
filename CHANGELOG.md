@@ -1,3 +1,7 @@
+# Version 2.4
+* Output improved, fast is now faster
+* Other small code refactoration
+
 # Version 2.3
 * Engine slightly improved
 * Entire new Send class of with of code reduction and speed fastenting
