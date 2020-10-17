@@ -16,7 +16,7 @@ class Send:
         r = randint(0, 1)
         self.isReturnable = False
         self.error_occured = False
-        error_string = f"{ColorObj.bad} Continuing to next url: Error {E.__class__} occured"
+        error_string = lambda error: f"{ColorObj.bad} Continuing to next url due to {error} error"
         print(f"{ColorObj.information} Trying {colored(url, color='cyan')} against web server!")
         try:
             if r == 0:
@@ -24,38 +24,45 @@ class Send:
             elif r == 1:
                 response = self.s.head(url, timeout=5)
         except ConnectionError:
-            print(error_string)
+            print(error_string("connection"))
             self.error_occured = True
             return url, False
         except Timeout:
-            print(error_string)
+            print(error_string("timeout"))
             self.error_occured = True
             return url, False
         except Exception as E:
-            print(error_string)
+            print(error_string("other"))
             self.error_occured = True
             return url, False
         
         try:
             print(f"{ColorObj.good} Response header: {response.headers['evil-here']}")
             self.isReturnable = True
+            return url, True
         except:
             try:
                 print(f"{ColorObj.good} Response Cookie: {response.cookies['bugbounty']}")
                 self.isReturnable = True
+                return url, True
             except:
-                pass
+                return url, False
 
     def sender_function(self, url: str) -> tuple:
-        self.isReturnable = False
-        url, exploitable  = self.deliver_request(url)
-        if self.error_occured: return url, exploitable
-        if self.isReturnable: return url, exploitable
-        instantiated_url = url.replace('http://', 'https://')
-        url, exploitable = self.deliver_request(instantiated_url)
-        if self.error_occured: return instantiated_url, exploitable
-        if self.isReturnable: return instantiated_url, exploitable 
-        instantiated_url = url.replace('http://', 'http://www.')
-        url, exploitable = self.deliver_request(instantiated_url)
-        if self.error_occured: return instantiated_url, exploitable
-        if self.isReturnable: return instantiated_url, exploitable
+        try:
+            self.isReturnable = False
+            url, exploitable  = self.deliver_request(url)
+            if self.error_occured: return url, exploitable
+            if self.isReturnable: return url, exploitable
+            instantiated_url = url.replace('http://', 'https://')
+            url, exploitable = self.deliver_request(instantiated_url)
+            if self.error_occured: return instantiated_url, exploitable
+            if self.isReturnable: return instantiated_url, exploitable 
+            instantiated_url = url.replace('http://', 'http://www.')
+            url, exploitable = self.deliver_request(instantiated_url)
+            if self.error_occured: return instantiated_url, exploitable
+            if self.isReturnable: return instantiated_url, exploitable
+        except Exception as E:
+            from traceback import print_exc, format_exc
+            print_exc()
+            format_exc()

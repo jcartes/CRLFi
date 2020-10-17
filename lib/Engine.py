@@ -72,7 +72,7 @@ class PayloadGenerator:
 
     def netloc_generator(self, parsed_url, payloads: list) -> list:
         payloads_to_try = []
-        netlocprint = f"{ColorObj.bad} Skipping payload generation due to error: {E},{E.__class__}"
+        netlocprint = lambda error: f"{ColorObj.bad} Skipping payload generation due to error: {error}"
         urlprint = lambda error: f"{ColorObj.bad} Skipping url due to {error} error of {colored(parsed_url.netloc, color='cyan')}!"
         if parsed_url.netloc.count('.') >= 5 or len(parsed_url.netloc) > 40:
             urlprint("length")
@@ -80,16 +80,16 @@ class PayloadGenerator:
         try:
             head(self.PathFunctioner.urler(parsed_url.netloc), timeout=5)
         except ConnectionError:
-            print(netlocprint)
+            print(netlocprint("Connection Error"))
             return payloads_to_try
         except Timeout:
-            print(netlocprint)
+            print(netlocprint("Timeout request"))
             return payloads_to_try
         except Exception as E:
-            print(netlocprint)
+            print(netlocprint("Other exception"))
             return payloads_to_try
         if self.Skipper.check_netloc(parsed_url.netloc):
-            urlprint("repetition")
+            print(urlprint("repetition"))
             return payloads_to_try
         else:
             self.Skipper.add_netloc(parsed_url.netloc)

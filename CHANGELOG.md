@@ -1,3 +1,6 @@
+# Version 2.7
+* Major bug fixes
+
 # Version 2.6
 * More variable caching in printing increased
 * Unnecessary imports removal

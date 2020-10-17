@@ -57,9 +57,8 @@ try:
     with ThreadPoolExecutor(max_workers=argv.threads) as Mapper:
         async_generator(argv.domain)
         Mapper.map(async_generator, input_wordlist)
-
     with ThreadPoolExecutor(max_workers=argv.threads) as Submitter:
-        future_objects = [Submitter.submit(Sender.send_function, payload_to_try) for payload_to_try in to_try]
+        future_objects = [Submitter.submit(Sender.sender_function, p) for p in to_try]
         def owrite(future_objects):
             if argv.output_directory:
                 write_output(future_objects, filename = argv.domain, path = argv.output_directory)
