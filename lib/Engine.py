@@ -1,11 +1,11 @@
-from re import findall
 from re import search
+from re import findall
 from requests import head
 from termcolor import colored
 from requests.exceptions import ConnectionError, Timeout
 
-from lib.Globals import ColorObj
 from lib.Skipper import Skip
+from lib.Globals import ColorObj
 from lib.PathFunctions import PathFunction
 from lib.ParamReplacer import ParamReplace
 
@@ -16,6 +16,7 @@ class PayloadGenerator:
         self.Skipper = Skip()
     
     def query_generator(self, parsed_url, payloads: list) -> list:
+        queryprint = f"{ColorObj.bad} Skipping some used parameters."
         parameters_to_try, payloads_to_try = [], []
         upto_path, query = self.PathFunctioner.merge(parsed_url.netloc, parsed_url.path), parsed_url.query
         if len(query) > 550: return payloads_to_try
@@ -24,12 +25,12 @@ class PayloadGenerator:
             if not self.Skipper.check_parameter(upto_path, parameter):
                 self.Skipper.add_parameter(upto_path, [parameter])
             else:
-                print(f"{ColorObj.bad} Skipping some used parameters.")
+                print(queryprint)
                 continue 
             if not self.Skipper.check_unique_parameter(parameter):
                 self.Skipper.add_unique_parameter([parameter])
             else:
-                print(f"{ColorObj.bad} Skipping some largely used parameters.")
+                print(queryprint)
                 continue
             parameters_to_try.append(parameter)
         if not len(parameters_to_try): return payloads_to_try
@@ -41,23 +42,24 @@ class PayloadGenerator:
 
     def path_generator(self, parsed_url, payloads: list) -> list:
         payloads_to_try = []
+        pathprint = f"{ColorObj.bad} Skipping some used paths."
         upto_path = self.PathFunctioner.urlerslasher(parsed_url.netloc)
         if parsed_url.path == '/' or len(parsed_url.path) == 1:
             payloads_list = self.netloc_generator(parsed_url, payloads)
-            payloads_to_try = [payloads for payloads in payloads_list]
+            payloads_to_try = [p for p in payloads_list]
         else:
             path_list = [self.PathFunctioner.ender(path, '/') for path in findall(r'([^/]+)', parsed_url.path)]
             path_range = range(int(len(path_list) -1), 0, -1)
             for npath in path_range:
                 unslashed = self.PathFunctioner.unender(path_list[npath-1], '/')
                 if self.Skipper.check_path(path_list[npath-1]):
-                    print(f"{ColorObj.bad} Skipping some used paths.")
+                    print(pathprint)
                     return payloads_to_try
                 elif search('[a-zA-Z].+[0-9]$', unslashed):
-                    print(f"{ColorObj.bad} Skipping some numbered paths.")
+                    print(pathprint)
                     return payloads_to_try
                 elif search('^[0-9].*$', unslashed) and len(unslashed) >= 2:
-                    print(f"{ColorObj.bad} Skipping some more more numbered paths.")
+                    print(pathprin)
                     return payloads_to_try
                 elif not self.Skipper.check_path(path_list[npath-1]):
                     self.Skipper.add_path(path_list[npath-1])    
@@ -70,21 +72,24 @@ class PayloadGenerator:
 
     def netloc_generator(self, parsed_url, payloads: list) -> list:
         payloads_to_try = []
+        netlocprint = f"{ColorObj.bad} Skipping payload generation due to error: {E},{E.__class__}"
+        urlprint = lambda error: f"{ColorObj.bad} Skipping url due to {error} error of {colored(parsed_url.netloc, color='cyan')}!"
         if parsed_url.netloc.count('.') >= 5 or len(parsed_url.netloc) > 40:
-            print(f"{ColorObj.bad} Skipping url {colored(parsed_url.netloc, color='cyan')}!")
+            urlprint("length")
             return payloads_to_try
         try:
             head(self.PathFunctioner.urler(parsed_url.netloc), timeout=5)
         except ConnectionError:
-            print("{ColorObj.bad} Could not connect! {E}, {E.__class__} occured")
+            print(netlocprint)
             return payloads_to_try
         except Timeout:
-            print("{ColorObj.bad Timed out.Error occured: {E}")
+            print(netlocprint)
             return payloads_to_try
         except Exception as E:
-            print(f"{ColorObj.bad} Other connection error in netloc {E},{E.__class__} occured")
+            print(netlocprint)
+            return payloads_to_try
         if self.Skipper.check_netloc(parsed_url.netloc):
-            print(f"{ColorObj.bad} Skipping some used netloc")
+            urlprint("repetition")
             return payloads_to_try
         else:
             self.Skipper.add_netloc(parsed_url.netloc)

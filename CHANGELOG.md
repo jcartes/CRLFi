@@ -1,3 +1,12 @@
+# Version 2.6
+* More variable caching in printing increased
+* Unnecessary imports removal
+* Major bug fixes
+
+# Version 2.5
+* Removed unncessary color
+* Small bug fixes
+
 # Version 2.4
 * Output improved, fast is now faster
 * Other small code refactoration

@@ -1,9 +1,5 @@
 from sys import stdin
-from requests import Session   
 from termcolor import colored
-from random import randint as rdi
-from requests.exceptions import Timeout
-from requests.exceptions import ConnectionError
 
 from lib.PathFunctions import PathFunction
 from lib.Globals import ColorObj, Headers

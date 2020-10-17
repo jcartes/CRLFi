@@ -9,8 +9,7 @@ from lib.Send import Send
 from lib.Engine import PayloadGenerator
 from lib.PathFunctions import PathFunction
 from lib.Globals import payloads, to_try, ColorObj
-from lib.Functions import starter, write_output_directory
-from lib.Functions import write_output
+from lib.Functions import starter, write_output
 
 parser = ArgumentParser(description=colored("CRLFi Scanner", color='yellow'), epilog=colored("Enjoy bug hunting",color='yellow'))
 input_group = parser.add_mutually_exclusive_group()
@@ -63,7 +62,7 @@ try:
         future_objects = [Submitter.submit(Sender.send_function, payload_to_try) for payload_to_try in to_try]
         def owrite(future_objects):
             if argv.output_directory:
-                write_output_directory(future_objects, filename = argv.domain, path = argv.output_directory)
+                write_output(future_objects, filename = argv.domain, path = argv.output_directory)
             if argv.output:
                 write_output(future_objects, filename = argv.output)
         owrite(future_objects)

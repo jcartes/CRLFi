@@ -1,6 +1,8 @@
-from termcolor import colored
 from requests import Session
+from termcolor import colored
 from random import randint
+from requests.exceptions import Timeout
+from requests.exceptions import ConnectionError
 
 from lib.Globals import ColorObj
 
