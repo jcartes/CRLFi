@@ -1,4 +1,5 @@
 # Version 2.3
+* Engine slightly improved
 * Entire new Send class of with of code reduction and speed fastenting
 * Memory usage is reduced and speed is increased due to functional programming from linear programming
 
