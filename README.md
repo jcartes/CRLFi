@@ -1,7 +1,7 @@
 # CRLFi
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![CRLFI](lib/CRLFI.png)
 ## Description
-Semi Automated CRLF injection scanner with concurrency. Scans for CRLF injection in parameters, paths and netlocs.
+Automated CRLF injection scanner with concurrency. Scans for CRLF injection in parameters, paths and netlocs.
 
 ## Features
 1. Automatic and concurrent scanning of CRLF injections.
@@ -44,4 +44,4 @@ Enjoy bug hunting
 
 ## FAQ
 1. Does CRLF injection only affect HTTP/1?  
-* Well, no. I found CRLF injection on 2 http/2 enabled website with http2. Also checkout this: [CRLF injection in HTTP2](https://security.stackexchange.com/questions/235046/does-http-2-prevent-security-vulnerabilites-like-crlf-injection)
+* No, I found CRLF injection on 2 http/2 enabled website with this tool. Also checkout this: [CRLF injection in HTTP2](https://security.stackexchange.com/questions/235046/does-http-2-prevent-security-vulnerabilites-like-crlf-injection)

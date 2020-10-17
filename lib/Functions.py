@@ -23,8 +23,7 @@ def starter(argv):
                 print("{} Use --help".format(ColorObj.bad))
                 exit()
             else:
-                stdinarray = stdin.read().split('\n')
-                return [line.rstrip('\n').strip(' ') for line in stdinarray if line]
+                return [line.rstrip('\n').strip(' ') for line in stdin.read().split('\n') if line]
         else:
             return [argv.domain.strip(' ')]
     else:

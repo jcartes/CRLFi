@@ -2,4 +2,3 @@ argparse
 requests
 termcolor
 requests
-faster_than_requests
