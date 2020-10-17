@@ -5,12 +5,12 @@ from urllib.parse import urlparse
 from argparse import ArgumentParser
 from concurrent.futures import ThreadPoolExecutor
 
-from lib.Functions import request_to_try, starter
-from lib.Functions import ColorObj
-from lib.Functions import write_output_directory, write_output
-from lib.Globals import payloads, to_try
-from lib.PathFunctions import PathFunction
+from lib.Send import Send
 from lib.Engine import PayloadGenerator
+from lib.PathFunctions import PathFunction
+from lib.Globals import payloads, to_try, ColorObj
+from lib.Functions import starter, write_output_directory
+from lib.Functions import write_output
 
 parser = ArgumentParser(description=colored("CRLFi Scanner", color='yellow'), epilog=colored("Enjoy bug hunting",color='yellow'))
 input_group = parser.add_mutually_exclusive_group()
@@ -25,30 +25,34 @@ parser.add_argument('-b', '--banner', action="store_true", help="Print banner an
 argv = parser.parse_args()
 
 input_wordlist = starter(argv)
-path_fn = PathFunction()
-PayloaderApp = PayloadGenerator()
+Sender = Send()
+PathFunctioner = PathFunction()
+Payloader = PayloadGenerator()
 
 def async_generator(url: str):
     global to_try
-    parsed_url = urlparse(path_fn.urler(url))
+    parsed_url = urlparse(PathFunctioner.urler(url))
+    print_asyncgen = lambda data: print(f"{ColorObj.information} Generating {data} for: {colored(url, color='cyan')}")
     try:
         if parsed_url.query:
-            print(f"{ColorObj.information} Generating query payload for: {colored(url, color='cyan')}")
-            for payloaded_url in PayloaderApp.query_generator(parsed_url, payloads):
+            print_asyncgen('query')
+            for payloaded_url in Payloader.query_generator(parsed_url, payloads):
                 to_try.append(payloaded_url)
-            print(f"{ColorObj.information} Generating path payload for: {colored(url, color='cyan')}")
-            for payloaded_url in PayloaderApp.path_generator(parsed_url, payloads):
+            print_asyncgen('path')
+            for payloaded_url in Payloader.path_generator(parsed_url, payloads):
                 to_try.append(payloaded_url)
         elif parsed_url.path:
-            print(f"{ColorObj.information} Generating path payload for: {colored(url, color='cyan')}")
-            for payloaded_url in PayloaderApp.path_generator(parsed_url, payloads):
+            print_asyncgen('path')
+            for payloaded_url in Payloader.path_generator(parsed_url, payloads):
                 to_try.append(payloaded_url)
         elif parsed_url.netloc:
-            print(f"{ColorObj.information} Generating netloc payload for: {colored(url, color='cyan')}")
-            for payloaded_url in PayloaderApp.netloc_generator(parsed_url, payloads):
+            print_asyncgen('netloc')
+            for payloaded_url in Payloader.netloc_generator(parsed_url, payloads):
                to_try.append(payloaded_url)
     except Exception as E:
-        print(f"Error {E}, {E.__class__} failed async generator")
+        from traceback import print_exc, format_exc
+        print_exc()
+        format_exc()
 
 try:
     with ThreadPoolExecutor(max_workers=argv.threads) as Mapper:
@@ -56,13 +60,13 @@ try:
         Mapper.map(async_generator, input_wordlist)
 
     with ThreadPoolExecutor(max_workers=argv.threads) as Submitter:
-        del PayloaderApp; del async_generator;
-        print(f"{ColorObj.good} Freeing some memory..")
-        future_objects = [Submitter.submit(request_to_try, payload_to_try) for payload_to_try in to_try]
-        if argv.output_directory:
-            write_output_directory(argv.output_directory, argv.domain, future_objects)
-        if argv.output:
-            write_output(argv.output, future_objects)
+        future_objects = [Submitter.submit(Sender.send_function, payload_to_try) for payload_to_try in to_try]
+        def output_write(future_objects):
+            if argv.output_directory:
+                write_output_directory(argv.output_directory, argv.domain, future_objects)
+            if argv.output:
+                write_output(argv.output, future_objects)
+        output_write(future_objects)
 except KeyboardInterrupt:
     exit()
 except Exception as E:

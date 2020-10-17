@@ -1,3 +1,4 @@
+from re import findall
 class ParamReplace:
     def __init__(self):
         pass
@@ -49,7 +50,6 @@ class ParamReplace:
         return returner_list
 
     def expand_parameter(self, query_data: str) -> tuple:
-        from re import findall
         p,q = [],[]
         for parameters,values in findall(r'([^&]+)=([^&]+)', query_data):
             p.append(parameters)
@@ -61,5 +61,5 @@ class ParamReplace:
     def auto(self, upto_path_url, ppath, payload):
         apath, bpath = self.expand_parameter(ppath)
         xpath = self.replacement(apath, bpath, payload)
-        ypath = self.gen_url(upto_path_url, xpath)
+        ypath = self.generate_url(upto_path_url, xpath)
         return ypath
