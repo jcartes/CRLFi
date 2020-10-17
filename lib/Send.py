@@ -1,5 +1,8 @@
+from termcolor import colored
 from requests import Session
 from random import randint
+
+from lib.Globals import ColorObj
 
 class Send:
     def __init__(self):
@@ -8,9 +11,9 @@ class Send:
         self.error_occured = False
 
     def deliver_request(self, url):
+        r = randint(0, 1)
         self.isReturnable = False
         self.error_occured = False
-        r = randint(0, 1)
         error_string = f"{ColorObj.bad} Continuing to next url: Error {E.__class__} occured"
         print(f"{ColorObj.information} Trying {colored(url, color='cyan')} against web server!")
         try:

@@ -12,11 +12,11 @@ def banner():
     banner = '\x1b[5m\x1b[1m\x1b[40m\x1b[31m   __________  __    _______ \n  / ____/ __ \\/ /   / ____(_)\n / /   / /_/ / /   / /_  / / \n/ /___/ _, _/ /___/ __/ / /  \n\\____/_/ |_/_____/_/   /_/   \n                             \n\x1b[0m'
     print(banner)
     print(colored('Intelligent CRLFi Hunter', color='red', attrs=['bold']))
+    exit()
 
 def starter(argv):
     if argv.banner:
         banner()
-        exit(0)
     if argv.output_directory:
         if not argv.domain:
                 print("{} Output directory specified but not domain".format(ColorObj.bad))

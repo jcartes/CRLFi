@@ -1,6 +1,7 @@
 # Version 2.3
 * Engine slightly improved
 * Entire new Send class of with of code reduction and speed fastenting
+* Lots of python3 caching improvement
 * Memory usage is reduced and speed is increased due to functional programming from linear programming
 
 # Version 2.2
