@@ -8,43 +8,33 @@ class Skip:
         self.parameter_list = {}
         self.uparameter_list = {}
 
-    def add_path(self, path_to_add: str) -> bool:
-        if path_to_add in self.path_list:
+    def add_netloc(self, netloc: str) -> bool:
+        if self.check_netloc(netloc):
             return False
-        else:
-            self.path_list.append(path_to_add)
-            return True
+        self.netloc_list.append(netloc)
+        return True
+
+    def add_path(self, path: str) -> bool:
+        if self.check_path(path):
+            return False
+        self.path_list.append(path)
+        return True
 
     def add_parameter(self, url: str, parameter_list: list) -> list:
         url = self.PathFunctions.ender(url, '?')
-        if url in self.parameter_list:
-             var = self.parameter_list[url]
-             var.update(set(parameter_list))
-             self.parameter_list[url] = var
-        else:
-             self.parameter_list[url] = set(parameter_list)
-        return self.parameter_list[url] 
-    
-    def add_unique_parameter(self, parameter_list: list) -> bool:
-        for parameter in parameter_list:
-            if not parameter in self.uparameter_list:
-                self.uparameter_list[parameter] = 0
-            else:
-                self.uparameter_list[parameter] += 1
-        return True
- 
-    def add_netloc(self, netloc: str) -> bool:
-        if netloc in self.netloc_list:
+        if bool(self.parameter_list.get(url)):
+            var = self.parameter_list[url]
+            var.update(set(parameter_list))
+            self.parameter_list[url] = var
             return False
-        else:
-            self.netloc_list.append(netloc)
-            return True
-
-    def check_path(self, path: str) -> bool:
-        return bool(path in self.path_list)
+        self.parameter_list[url] = set(parameter_list)
+        return True
 
     def check_netloc(self, netloc: str) -> bool:
         return bool(netloc in self.netloc_list)
+
+    def check_path(self, path: str) -> bool:
+        return bool(path in self.path_list)
 
     def check_parameter(self, url: str, parameter: str) -> bool:
         url = self.PathFunctions.ender(url, '?')
@@ -54,6 +44,14 @@ class Skip:
                 if self_parameter == parameter:
                     return True
         return False
+
+    def add_unique_parameter(self, parameter_list: list) -> bool:
+        for parameter in parameter_list:
+            if not parameter in self.uparameter_list:
+                self.uparameter_list[parameter] = 0
+            else:
+                self.uparameter_list[parameter] += 1
+        return True
 
     def check_unique_parameter(self, parameter: str):
         if not parameter in self.uparameter_list:

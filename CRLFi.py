@@ -67,5 +67,5 @@ try:
 except KeyboardInterrupt:
     exit()
 except Exception as E:
-    print(E,E.__class__)
+    print(E, E.__class__)
 
