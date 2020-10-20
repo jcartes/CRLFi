@@ -58,11 +58,11 @@ try:
         Mapper.map(async_generator, input_wordlist)
     with ThreadPoolExecutor(max_workers=argv.threads) as Submitter:
         future_objects = [Submitter.submit(Sender.sender_function, p) for p in to_try]
-        def owrite(future_objects):
+        def owrite(objects):
             if argv.output_directory:
-                write_output(future_objects, filename = argv.domain, path = argv.output_directory)
+                write_output(objects, filename = argv.domain, path = argv.output_directory)
             if argv.output:
-                write_output(future_objects, filename = argv.output)
+                write_output(objects, filename = argv.output)
         owrite(future_objects)
 except KeyboardInterrupt:
     exit()
