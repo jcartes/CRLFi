@@ -5,8 +5,8 @@ from urllib.parse import urlparse
 from argparse import ArgumentParser
 from concurrent.futures import ThreadPoolExecutor
 
-from lib.Send import Send
-from lib.Engine import PayloadGenerator
+from lib.Sender import Send
+from lib.Engine import Engine
 from lib.PathFunctions import PathFunction
 from lib.Globals import payloads, to_try, ColorObj
 from lib.Functions import starter, write_output
@@ -26,7 +26,7 @@ argv = parser.parse_args()
 input_wordlist = starter(argv)
 Sender = Send()
 PathFunctioner = PathFunction()
-Payloader = PayloadGenerator()
+Payloader = Engine()
 
 def async_generator(url: str):
     global to_try

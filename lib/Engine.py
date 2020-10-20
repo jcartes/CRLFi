@@ -7,7 +7,7 @@ from lib.Globals import ColorObj
 from lib.PathFunctions import PathFunction
 from lib.ParamReplacer import ParamReplace
 
-class PayloadGenerator:
+class Engine:
     def __init__(self):
         self.PathFunctions = PathFunction()
         self.Replacer = ParamReplace()
