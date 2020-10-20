@@ -1,6 +1,7 @@
+from random import randint
 from requests import Session
 from termcolor import colored
-from random import randint
+from traceback import print_exc
 from requests.exceptions import Timeout
 from requests.exceptions import ConnectionError
 
@@ -16,7 +17,7 @@ class Send:
         r = randint(0, 1)
         self.isReturnable = False
         self.error_occured = False
-        error_string = lambda error: f"{ColorObj.bad} Continuing to next url due to {error} error"
+        error_string = lambda error: f"{ColorObj.bad} Skipping url due to {error}"
         print(f"{ColorObj.information} Trying {colored(url, color='cyan')} against web server!")
         try:
             if r == 0:
@@ -24,15 +25,15 @@ class Send:
             elif r == 1:
                 response = self.s.head(url, timeout=5)
         except ConnectionError:
-            print(error_string("connection"))
+            print(error_string("ConnectionError"))
             self.error_occured = True
             return url, False
         except Timeout:
-            print(error_string("timeout"))
+            print(error_string("TimeoutError"))
             self.error_occured = True
             return url, False
         except Exception as E:
-            print(error_string("other"))
+            print(error_string("OtherError"))
             self.error_occured = True
             return url, False
         
@@ -63,6 +64,4 @@ class Send:
             if self.error_occured: return instantiated_url, exploitable
             if self.isReturnable: return instantiated_url, exploitable
         except Exception as E:
-            from traceback import print_exc, format_exc
             print_exc()
-            format_exc()

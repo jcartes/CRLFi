@@ -1,4 +1,6 @@
 # Version 2.7
+* Faster than requests get2str check introduced
+* Send Class improvements
 * Major bug fixes
 
 # Version 2.6

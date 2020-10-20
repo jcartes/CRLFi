@@ -1,4 +1,4 @@
-from os import getenv
+#from os import getenv
 from lib.ColoredObject import Color
 
 payloads = [
@@ -20,7 +20,7 @@ payloads = [
 "/%E5%98%8A%E5%98%8DSet-Cookie:bugbounty=bugbountyplz",
 ]
 
-Headers = {
+headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36'
 }
 
@@ -31,6 +31,7 @@ ColorObj = Color()
 #    Headers['X-Bug-Bounty'] = getenv('HACKERONE_ACCESS_TOKEN')
 #except Exception:
 #    pass
+
 #"/%23%0aevil-here:bugbountyplz",
 #"/%23%0devil-here:bugbountyplz",
 #"/%2f%2e%2e%0d%0aevil-here:bugbountyplz",
