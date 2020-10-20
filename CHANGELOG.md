@@ -1,3 +1,6 @@
+# Versoin 2.8
+* Skipper improvements
+
 # Version 2.7
 * Major bug fixes
 * Main file general improvement

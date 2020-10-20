@@ -1,12 +1,12 @@
-from sys import stdin
+from sys import stdin, exit
 from termcolor import colored
 
 from lib.PathFunctions import PathFunction
-from lib.Globals import ColorObj, Headers
+from lib.Globals import ColorObj
 
 def banner():
-    banner = '\x1b[5m\x1b[1m\x1b[40m\x1b[31m   __________  __    _______ \n  / ____/ __ \\/ /   / ____(_)\n / /   / /_/ / /   / /_  / / \n/ /___/ _, _/ /___/ __/ / /  \n\\____/_/ |_/_____/_/   /_/   \n                             \n\x1b[0m'
-    print(banner)
+    b = '\x1b[5m\x1b[1m\x1b[40m\x1b[31m   __________  __    _______ \n  / ____/ __ \\/ /   / ____(_)\n / /   / /_/ / /   / /_  / / \n/ /___/ _, _/ /___/ __/ / /  \n\\____/_/ |_/_____/_/   /_/   \n                             \n\x1b[0m'
+    print(b)
     print(colored('Intelligent CRLFi Hunter', color='red', attrs=['bold']))
     exit()
 
@@ -15,8 +15,8 @@ def starter(argv):
         banner()
     if argv.output_directory:
         if not argv.domain:
-                print("{} Output directory specified but not domain".format(ColorObj.bad))
-                exit()
+            print("{} Output directory specified but not domain".format(ColorObj.bad))
+            exit()
     if not argv.wordlist:
         if not argv.domain:
             if not argv.stdin:
@@ -29,7 +29,7 @@ def starter(argv):
     else:
         return [line.rstrip('\n') for line in open(argv.wordlist)]
 
-def write_output(objects, filename = None, path = None):
+def write_output(objects, filename=None, path=None):
     if path:
         path_fn = PathFunction()
         output_file = open(path_fn.ender(path, '/') + filename + '.CRLFi', 'a')
