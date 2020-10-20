@@ -1,5 +1,5 @@
-from lib.ColoredObject import Color as Cobj
 from os import getenv
+from lib.ColoredObject import Color
 
 payloads = [
 "/%0aevil-here:bugbountyplz",
@@ -25,7 +25,7 @@ Headers = {
 }
 
 to_try = []
-ColorObj = Cobj()
+ColorObj = Color()
 
 #try:
 #    Headers['X-Bug-Bounty'] = getenv('HACKERONE_ACCESS_TOKEN')
