@@ -1,7 +1,8 @@
 # Version 2.7
-* Faster than requests get2str check introduced
-* Send Class improvements
 * Major bug fixes
+* Main file general improvement
+* Faster than requests get2str check introduced
+* Send Class code refactoring
 
 # Version 2.6
 * More variable caching in printing increased
