@@ -1,5 +1,8 @@
 # CRLFi
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![CRLFI](lib/CRLFI.png)
+[![Code Grade](https://www.code-inspector.com/project/15089/status/svg)](https://frontend.code-inspector.com/public/project/15089/CRLFi/dashboard)
+[![Code Quality](https://www.code-inspector.com/project/15089/score/svg)](https://frontend.code-inspector.com/public/project/15089/CRLFi/dashboard)
+
 ## Description
 Automated CRLF injection scanner with concurrency. Scans for CRLF injection in parameters, paths and netlocs.
 
