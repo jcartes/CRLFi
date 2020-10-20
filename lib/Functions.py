@@ -42,4 +42,4 @@ def write_output(objects, filename=None, path=None):
         if is_exploitable:
             print(f"{ColorObj.good} Yes, the url is exploitable\t,Payload: {the_payload}")
         output_file.write("Exploitable:{}, Payload:{}\n".format(is_exploitable, the_payload))
-    return output_file.close()     
+    return output_file.close()
