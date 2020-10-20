@@ -48,7 +48,7 @@ def async_generator(url: str):
             print_asyncgen('netloc')
             for payloaded_url in Payloader.netloc_generator(parsed_url, payloads):
                to_try.append(payloaded_url)
-    except Exception as E:
+    except Exception:
         from traceback import print_exc
         print_exc()
 
