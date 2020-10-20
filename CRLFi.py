@@ -49,9 +49,8 @@ def async_generator(url: str):
             for payloaded_url in Payloader.netloc_generator(parsed_url, payloads):
                to_try.append(payloaded_url)
     except Exception as E:
-        from traceback import print_exc, format_exc
+        from traceback import print_exc
         print_exc()
-        format_exc()
 
 try:
     with ThreadPoolExecutor(max_workers=argv.threads) as Mapper:
