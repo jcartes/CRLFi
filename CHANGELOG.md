@@ -1,5 +1,7 @@
 # Versoin 2.8
-* Skipper improvements
+* Traliing whitespace removal
+* Minor improvements
+* Skipper refactoration and code more readable
 
 # Version 2.7
 * Major bug fixes

@@ -35,7 +35,7 @@ class Engine:
         for payload in payloads:
             query_list = self.Replacer.only_replacement(parameters, values, self.PathFunctions.unstarter(payload, '/'), parameters_to_try)
             payloads_list = self.Replacer.generate_url(upto_path, query_list)
-            [payloads_to_try.append(p) for p in payloads_list]
+            payloads_to_try = [payload for payload in payloads_list if payload]
         return payloads_to_try
 
     def path_generator(self, parsed_url, payloads: list) -> list:
@@ -60,7 +60,7 @@ class Engine:
                     print(skip_print)
                     return payloads_to_try
                 elif not self.Skipper.check_path(path_list[npath-1]):
-                    self.Skipper.add_path(path_list[npath-1])    
+                    self.Skipper.add_path(path_list[npath-1])
                 for payload in payloads:
                     path_list[npath] = self.PathFunctions.unstarter(payload, '/')
                     path_payload = upto_path + "".join(path_list)
