@@ -1,4 +1,7 @@
-# Versoin 2.8
+# Version 2.9
+* Generators use instead of list for improved memory
+
+# Version 2.8
 * Traliing whitespace removal
 * Minor improvements
 * Skipper refactoration and code more readable

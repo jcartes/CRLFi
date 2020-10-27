@@ -47,10 +47,10 @@ class Engine:
             payloads_to_try = [p for p in payloads_list]
         else:
             path_list = [self.PathFunctions.ender(path, '/') for path in findall(r'([^/]+)', parsed_url.path)]
-            path_range = range(int(len(path_list) -1), 0, -1)
-            for npath in path_range:
-                unslashed = self.PathFunctions.unender(path_list[npath-1], '/')
-                if self.Skipper.check_path(path_list[npath-1]):
+            path_range = range(len(path_list) -1, 0, -1)
+            for index in path_range:
+                unslashed = self.PathFunctions.unender(path_list[index-1], '/')
+                if self.Skipper.check_path(path_list[index-1]):
                     print(skip_print)
                     return payloads_to_try
                 elif search('[a-zA-Z].+[0-9]$', unslashed):
@@ -59,10 +59,10 @@ class Engine:
                 elif search('^[0-9].*$', unslashed) and len(unslashed) >= 2:
                     print(skip_print)
                     return payloads_to_try
-                elif not self.Skipper.check_path(path_list[npath-1]):
-                    self.Skipper.add_path(path_list[npath-1])
+                elif not self.Skipper.check_path(path_list[index-1]):
+                    self.Skipper.add_path(path_list[index-1])
                 for payload in payloads:
-                    path_list[npath] = self.PathFunctions.unstarter(payload, '/')
+                    path_list[index] = self.PathFunctions.unstarter(payload, '/')
                     path_payload = upto_path + "".join(path_list)
                     payloads_to_try.append(path_payload)
                 path_list.pop()

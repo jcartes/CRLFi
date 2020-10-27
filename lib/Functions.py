@@ -23,16 +23,16 @@ def starter(argv):
                 print("{} Use --help".format(ColorObj.bad))
                 exit()
             else:
-                return [line.rstrip('\n').strip(' ') for line in stdin.read().split('\n') if line]
+                return (line.rstrip('\n').strip(' ') for line in stdin.read().split('\n') if line)
         else:
             return [argv.domain.strip(' ')]
     else:
-        return [line.rstrip('\n') for line in open(argv.wordlist)]
+        return (line.rstrip('\n') for line in open(argv.wordlist) if line)
 
 def write_output(objects, filename=None, path=None):
     if path:
-        path_fn = PathFunction()
-        output_file = open(path_fn.ender(path, '/') + filename + '.CRLFi', 'a')
+        PathFunctions = PathFunction()
+        output_file = open(PathFunctions.ender(path, '/') + filename + '.CRLFi', 'a')
     elif filename:
         output_file = open(filename, 'a')
     else:
