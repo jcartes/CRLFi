@@ -4,7 +4,7 @@
 [![Code Quality](https://www.code-inspector.com/project/15089/score/svg)](https://frontend.code-inspector.com/public/project/15089/CRLFi/dashboard)
 
 ## Description
-Automated CRLF injection scanner with concurrency. Scans for CRLF injection in parameters, paths and netlocs.
+Fast and Automated CRLF injection scanner. Scans for CRLF injection in parameters, paths and netlocs. 
 
 ## Features
 1. Automatic and concurrent scanning of CRLF injections.
@@ -36,15 +36,20 @@ Enjoy bug hunting
 
 ## Example
 1. Scan a single URL  
-* ```CRLFi -d google.com```  
+> ```CRLFi -d google.com```  
 2. Scan URLs from wordlist
-* ```CRLFi -w /path/to/wordlist -oD `pwd` -t 10 -d domain.com```  
+> ```CRLFi -w /path/to/wordlist -oD `pwd` -t 10 -d domain.com```  
 3. Scan from stdin
-* ```assetfinder yahoo.com | CRLFi --- -t 10```
+> ```assetfinder yahoo.com | CRLFi --- -t 10```
+
+## Note
+* All of my tools are works on latest version of all modules, no venv necessary
+* All binary are compiled with link time optimization
+* Code is made as much fast as possible and as much memory efficient as possible.
 
 ## Caveats
 1. Nothing. If you think there is feel free to raise issue.
 
 ## FAQ
 1. Does CRLF injection only affect HTTP/1?  
-* No, I found CRLF injection on 2 http/2 enabled website with this tool. Also checkout this: [CRLF injection in HTTP2](https://security.stackexchange.com/questions/235046/does-http-2-prevent-security-vulnerabilites-like-crlf-injection)
+> No, I found CRLF injection on 2 http/2 enabled website with this tool. Also checkout this: [CRLF injection in HTTP2](https://security.stackexchange.com/questions/235046/does-http-2-prevent-security-vulnerabilites-like-crlf-injection)
