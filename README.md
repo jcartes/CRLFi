@@ -36,11 +36,11 @@ Enjoy bug hunting
 
 ## Example
 1. Scan a single URL  
->> ```CRLFi -d google.com```  
+* ```CRLFi -d google.com```  
 2. Scan URLs from wordlist
-> ```CRLFi -w /path/to/wordlist -oD `pwd` -t 10 -d domain.com```  
+* ```CRLFi -w /path/to/wordlist -oD `pwd` -t 10 -d domain.com```  
 3. Scan from stdin
-> ```assetfinder yahoo.com | CRLFi --- -t 10```
+* ```assetfinder yahoo.com | CRLFi --- -t 10```
 
 ## Note
 * All of my tools are works on latest version of all modules, no venv necessary
@@ -52,4 +52,4 @@ Enjoy bug hunting
 
 ## FAQ
 1. Does CRLF injection only affect HTTP/1?  
-> No, I found CRLF injection on 2 http/2 enabled website with this tool. Also checkout this: [CRLF injection in HTTP2](https://security.stackexchange.com/questions/235046/does-http-2-prevent-security-vulnerabilites-like-crlf-injection)
+* No, I found CRLF injection on 2 http/2 enabled website with this tool. Also checkout this: [CRLF injection in HTTP2](https://security.stackexchange.com/questions/235046/does-http-2-prevent-security-vulnerabilites-like-crlf-injection)
