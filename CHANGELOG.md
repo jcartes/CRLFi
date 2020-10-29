@@ -1,5 +1,8 @@
 # Version 3.0
-* Reduction in size of binary by 4KB
+* Code is now faster, and better due to improvements in return handling
+* Sender moved to Functions.py
+* Reduction in size of binary by 16KB
+* Small bug fixes
 
 # Version 2.9
 * Generators use instead of list for improved memory

@@ -16,7 +16,8 @@ class Engine:
         skip_print = f"{Color.bad} Skipping some used parameters."
         parameters_to_try, payloads_to_try = [], []
         upto_path, query = merge(parsed_url.netloc, parsed_url.path), parsed_url.query
-        if len(query) > 550: return payloads_to_try
+        if len(query) > 500:
+            return payloads_to_try
         parameters, values = self.Replacer.expand_parameter(query)
         for parameter in parameters:
             if not self.Skipper.check_parameter(upto_path, parameter):
@@ -30,7 +31,8 @@ class Engine:
                 print(skip_print)
                 continue
             parameters_to_try.append(parameter)
-        if not len(parameters_to_try): return payloads_to_try
+        if not len(parameters_to_try):
+            return payloads_to_try
         for payload in payloads:
             query_list = self.Replacer.only_replacement(parameters, values, unstarter(payload, '/'), parameters_to_try)
             payloads_list = self.Replacer.generate_url(upto_path, query_list)

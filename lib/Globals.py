@@ -31,7 +31,6 @@ Color = Color()
 #    Headers['X-Bug-Bounty'] = getenv('HACKERONE_ACCESS_TOKEN')
 #except Exception:
 #    pass
-
 #"/%23%0aevil-here:bugbountyplz",
 #"/%23%0devil-here:bugbountyplz",
 #"/%2f%2e%2e%0d%0aevil-here:bugbountyplz",

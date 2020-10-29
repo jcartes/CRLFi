@@ -27,7 +27,7 @@ def unender(xpath: str, ypath: str) -> str:
     return xpath
 
 def urler(xpath: str) -> str:
-    if not xpath.startswith('http://') and not xpath.startswith('https://'):
+    if not '://' in xpath:
         return "http://" + xpath
     return xpath
 

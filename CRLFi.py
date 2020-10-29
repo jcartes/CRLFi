@@ -5,11 +5,10 @@ from urllib.parse import urlparse
 from argparse import ArgumentParser
 from concurrent.futures import ThreadPoolExecutor
 
-from lib.Sender import Send
 from lib.Engine import Engine
 from lib.PathFunctions import urler
 from lib.Globals import payloads, to_try, Color
-from lib.Functions import starter, write_output
+from lib.Functions import starter, write_output, send_payload
 
 parser = ArgumentParser(description=colored("CRLFi Scanner", color='yellow'), epilog=colored("Enjoy bug hunting",color='yellow'))
 input_group = parser.add_mutually_exclusive_group()
@@ -24,7 +23,6 @@ parser.add_argument('-b', '--banner', action="store_true", help="Print banner an
 argv = parser.parse_args()
 
 input_wordlist = starter(argv)
-Sender = Send()
 Payloader = Engine()
 
 def async_generator(url: str):
@@ -51,13 +49,11 @@ def async_generator(url: str):
                 to_try.append(payloaded_url)
     except Exception:
         print(E,E.__class__)
-    return to_try
 try:
     with ThreadPoolExecutor(max_workers=argv.threads) as mapper:
-        async_generator(argv.domain)
         mapper.map(async_generator, input_wordlist)
     with ThreadPoolExecutor(max_workers=argv.threads) as submitter:
-        objects = [submitter.submit(Sender.sender_function, payloaded_url) for payloaded_url in to_try]
+        objects = [submitter.submit(send_payload, payloaded_url) for payloaded_url in to_try]
         if argv.output_directory:
             write_output(objects, filename = argv.domain, path = argv.output_directory)
         elif argv.output:
