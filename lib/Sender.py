@@ -5,7 +5,7 @@ from traceback import print_exc
 from requests.exceptions import Timeout
 from requests.exceptions import ConnectionError
 
-from lib.Globals import ColorObj
+from lib.Globals import Color
 
 class Send:
     def __init__(self):
@@ -17,8 +17,8 @@ class Send:
         r = randint(0, 1)
         self.isReturnable = False
         self.error_occured = False
-        error_string = lambda error: f"{ColorObj.bad} Skipping url due to {error}"
-        print(f"{ColorObj.information} Trying {colored(url, color='cyan')} against web server!")
+        error_string = lambda error: f"{Color.bad} Skipping url due to {error}"
+        print(f"{Color.information} Trying {colored(url, color='cyan')} against web server!")
         try:
             if r == 0:
                 response = self.s.get(url, timeout=5)
@@ -38,12 +38,12 @@ class Send:
             return url, False
         
         try:
-            print(f"{ColorObj.good} Response header: {response.headers['evil-here']}")
+            print(f"{Color.good} Response header: {response.headers['evil-here']}")
             self.isReturnable = True
             return url, True
         except:
             try:
-                print(f"{ColorObj.good} Response Cookie: {response.cookies['bugbounty']}")
+                print(f"{Color.good} Response Cookie: {response.cookies['bugbounty']}")
                 self.isReturnable = True
                 return url, True
             except:

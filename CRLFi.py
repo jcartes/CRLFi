@@ -7,8 +7,8 @@ from concurrent.futures import ThreadPoolExecutor
 
 from lib.Sender import Send
 from lib.Engine import Engine
-from lib.PathFunctions import PathFunction
-from lib.Globals import payloads, to_try, ColorObj
+from lib.PathFunctions import urler
+from lib.Globals import payloads, to_try, Color
 from lib.Functions import starter, write_output
 
 parser = ArgumentParser(description=colored("CRLFi Scanner", color='yellow'), epilog=colored("Enjoy bug hunting",color='yellow'))
@@ -25,13 +25,14 @@ argv = parser.parse_args()
 
 input_wordlist = starter(argv)
 Sender = Send()
-PathFunctioner = PathFunction()
 Payloader = Engine()
 
 def async_generator(url: str):
     global to_try
-    parsed_url = urlparse(PathFunctioner.urler(url))
-    print_asyncgen = lambda data: print(f"{ColorObj.information} Generating {data} for: {colored(url, color='cyan')}")
+    if not url:
+        return []
+    parsed_url = urlparse(urler(url))
+    print_asyncgen = lambda data: print(f"{Color.information} Generating {data} for: {colored(url, color='cyan')}")
     try:
         if parsed_url.query:
             print_asyncgen('query')
@@ -49,21 +50,18 @@ def async_generator(url: str):
             for payloaded_url in Payloader.netloc_generator(parsed_url, payloads):
                 to_try.append(payloaded_url)
     except Exception:
-        from traceback import print_exc
-        print_exc()
-
+        print(E,E.__class__)
+    return to_try
 try:
-    with ThreadPoolExecutor(max_workers=argv.threads) as Mapper:
+    with ThreadPoolExecutor(max_workers=argv.threads) as mapper:
         async_generator(argv.domain)
-        Mapper.map(async_generator, input_wordlist)
-    with ThreadPoolExecutor(max_workers=argv.threads) as Submitter:
-        future_objects = [Submitter.submit(Sender.sender_function, p) for p in to_try]
-        def owrite(objects):
-            if argv.output_directory:
-                write_output(objects, filename = argv.domain, path = argv.output_directory)
-            if argv.output:
-                write_output(objects, filename = argv.output)
-        owrite(future_objects)
+        mapper.map(async_generator, input_wordlist)
+    with ThreadPoolExecutor(max_workers=argv.threads) as submitter:
+        objects = [submitter.submit(Sender.sender_function, payloaded_url) for payloaded_url in to_try]
+        if argv.output_directory:
+            write_output(objects, filename = argv.domain, path = argv.output_directory)
+        elif argv.output:
+            write_output(objects, filename = argv.output)
 except KeyboardInterrupt:
     exit()
 except Exception as E:

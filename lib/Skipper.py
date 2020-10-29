@@ -1,8 +1,7 @@
-from lib.PathFunctions import PathFunction
+from lib.PathFunctions import ender
 
 class Skip:
     def __init__(self):
-        self.PathFunctions = PathFunction()
         self.path_list = []
         self.netloc_list = []
         self.parameter_list = {}
@@ -21,7 +20,7 @@ class Skip:
         return True
 
     def add_parameter(self, url: str, parameter_list: list) -> list:
-        url = self.PathFunctions.ender(url, '?')
+        url = ender(url, '?')
         if bool(self.parameter_list.get(url)):
             var = self.parameter_list[url]
             var.update(set(parameter_list))
@@ -37,7 +36,7 @@ class Skip:
         return bool(path in self.path_list)
 
     def check_parameter(self, url: str, parameter: str) -> bool:
-        url = self.PathFunctions.ender(url, '?')
+        url = ender(url, '?')
         exist = bool(self.parameter_list.get(url))
         if exist:
             for self_parameter in self.parameter_list[url]:

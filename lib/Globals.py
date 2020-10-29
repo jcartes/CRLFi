@@ -25,7 +25,7 @@ headers = {
 }
 
 to_try = []
-ColorObj = Color()
+Color = Color()
 
 #try:
 #    Headers['X-Bug-Bounty'] = getenv('HACKERONE_ACCESS_TOKEN')

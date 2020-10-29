@@ -1,8 +1,8 @@
-from sys import stdin, exit
+from sys import stdin
 from termcolor import colored
 
-from lib.PathFunctions import PathFunction
-from lib.Globals import ColorObj
+from lib.Globals import Color
+from lib.PathFunctions import ender
 
 def banner():
     b = '\x1b[5m\x1b[1m\x1b[40m\x1b[31m   __________  __    _______ \n  / ____/ __ \\/ /   / ____(_)\n / /   / /_/ / /   / /_  / / \n/ /___/ _, _/ /___/ __/ / /  \n\\____/_/ |_/_____/_/   /_/   \n                             \n\x1b[0m'
@@ -15,12 +15,12 @@ def starter(argv):
         banner()
     if argv.output_directory:
         if not argv.domain:
-            print("{} Output directory specified but not domain".format(ColorObj.bad))
+            print("{} Output directory specified but not domain".format(Color.bad))
             exit()
     if not argv.wordlist:
         if not argv.domain:
             if not argv.stdin:
-                print("{} Use --help".format(ColorObj.bad))
+                print("{} Use --help".format(Color.bad))
                 exit()
             else:
                 return (line.rstrip('\n').strip(' ') for line in stdin.read().split('\n') if line)
@@ -31,15 +31,15 @@ def starter(argv):
 
 def write_output(objects, filename=None, path=None):
     if path:
-        PathFunctions = PathFunction()
-        output_file = open(PathFunctions.ender(path, '/') + filename + '.CRLFi', 'a')
+        output_file = open(ender(path, '/') + filename + '.CRLFi', 'a')
     elif filename:
         output_file = open(filename, 'a')
     else:
-        assert False, "The program errored out"
-    for future_object in objects:
-        the_payload, is_exploitable = future_object.result()
+        print("The program errored out")
+        exit()
+    for single_object in objects:
+        the_payload, is_exploitable = single_object.result()
         if is_exploitable:
-            print(f"{ColorObj.good} Yes, the url is exploitable\t,Payload: {the_payload}")
+            print(f"{Color.good} Yes, the url is exploitable\t,Payload: {the_payload}")
         output_file.write("Exploitable:{}, Payload:{}\n".format(is_exploitable, the_payload))
     return output_file.close()

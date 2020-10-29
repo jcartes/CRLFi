@@ -1,5 +1,11 @@
+# Version 3.0
+* Reduction in size of binary by 4KB
+
 # Version 2.9
 * Generators use instead of list for improved memory
+* Huge changes in PathFunction and Skipper
+* Improved variable naming convention
+* Lots of performances improvement
 
 # Version 2.8
 * Traliing whitespace removal
