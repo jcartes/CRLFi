@@ -36,7 +36,7 @@ Enjoy bug hunting
 
 ## Example
 1. Scan a single URL  
-> ```CRLFi -d google.com```  
+>> ```CRLFi -d google.com```  
 2. Scan URLs from wordlist
 > ```CRLFi -w /path/to/wordlist -oD `pwd` -t 10 -d domain.com```  
 3. Scan from stdin
