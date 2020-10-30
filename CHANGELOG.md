@@ -1,3 +1,6 @@
+# Version 3.1
+* Try except in threadpoolexecutor is useless as it doesnt error out
+
 # Version 3.0
 * Code is now faster, and better due to improvements in return handling
 * Sender moved to Functions.py
@@ -36,7 +39,7 @@
 
 # Version 2.3
 * Engine slightly improved
-* Entire new Send class of with of code reduction and speed fastenting
+* Entire new Send class of with of code reduction and speed fastening
 * Lots of python3 caching improvement
 * Memory usage is reduced and speed is increased due to functional programming from linear programming
 

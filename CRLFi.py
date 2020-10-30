@@ -49,17 +49,13 @@ def async_generator(url: str):
                 to_try.append(payloaded_url)
     except Exception:
         print(E,E.__class__)
-try:
-    with ThreadPoolExecutor(max_workers=argv.threads) as mapper:
-        mapper.map(async_generator, input_wordlist)
-    with ThreadPoolExecutor(max_workers=argv.threads) as submitter:
-        objects = [submitter.submit(send_payload, payloaded_url) for payloaded_url in to_try]
-        if argv.output_directory:
-            write_output(objects, filename = argv.domain, path = argv.output_directory)
-        elif argv.output:
-            write_output(objects, filename = argv.output)
-except KeyboardInterrupt:
-    exit()
-except Exception as E:
-    print(E, E.__class__)
+
+with ThreadPoolExecutor(max_workers=argv.threads) as mapper:
+    mapper.map(async_generator, input_wordlist)
+with ThreadPoolExecutor(max_workers=argv.threads) as submitter:
+    objects = [submitter.submit(send_payload, payloaded_url) for payloaded_url in to_try]
+    if argv.output_directory:
+        write_output(objects, filename = argv.domain, path = argv.output_directory)
+    elif argv.output:
+        write_output(objects, filename = argv.output)
 
