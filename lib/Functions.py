@@ -2,6 +2,7 @@ from sys import stdin
 from random import randint
 from termcolor import colored
 from requests import Session
+from argparse import ArgumentParser
 from requests.exceptions import ConnectionError, Timeout
 
 from lib.Globals import Color
@@ -94,3 +95,18 @@ def send_payload(url: str) -> tuple:
     url, exploitable, isReturnable = deliver_request(instantiated_url)
     if isReturnable:
         return instantiated_url, exploitable
+
+def parse_args():
+    parser = ArgumentParser(description=colored("CRLFi Scanner", color='yellow'), epilog=colored("Enjoy bug hunting",color='yellow'))
+    input_group = parser.add_mutually_exclusive_group()
+    output_group = parser.add_mutually_exclusive_group()
+    input_group.add_argument('---', '---', action="store_true", dest="stdin", help="Stdin")
+    input_group.add_argument('-w', '--wordlist', type=str, help="Wordlist")
+    parser.add_argument('-d', '--domain', type=str, help="Domain name")
+    output_group.add_argument('-o', '--output', type=str, help="Output file")
+    output_group.add_argument('-oD', '--output-directory', type=str, help="Output directory")
+    parser.add_argument('-t', '--threads', type=int, help="Number of threads")
+    parser.add_argument('-b', '--banner', action="store_true", help="Print banner and exit")
+    return parser.parse_args()
+
+

@@ -1,3 +1,7 @@
+# Version 3.2
+* Rechanged from faster_than_requests to requests due to potential deadlock
+* Lots of reduction memory due to argparse being moved to function
+
 # Version 3.1
 * Try except reduced in async generator to gain 4KB reduction in binary size
 * Try except in threadpoolexecutor is useless as it doesnt error out

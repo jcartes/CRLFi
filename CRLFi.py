@@ -2,26 +2,14 @@
 
 from termcolor import colored
 from urllib.parse import urlparse
-from argparse import ArgumentParser
 from concurrent.futures import ThreadPoolExecutor
 
 from lib.Engine import Engine
 from lib.PathFunctions import urler
 from lib.Globals import payloads, to_try, Color
-from lib.Functions import starter, write_output, send_payload
+from lib.Functions import starter, write_output, send_payload, parse_args
 
-parser = ArgumentParser(description=colored("CRLFi Scanner", color='yellow'), epilog=colored("Enjoy bug hunting",color='yellow'))
-input_group = parser.add_mutually_exclusive_group()
-output_group = parser.add_mutually_exclusive_group()
-input_group.add_argument('---', '---', action="store_true", dest="stdin", help="Stdin")
-input_group.add_argument('-w', '--wordlist', type=str, help="Wordlist")
-parser.add_argument('-d', '--domain', type=str, help="Domain name")
-output_group.add_argument('-o', '--output', type=str, help="Output file")
-output_group.add_argument('-oD', '--output-directory', type=str, help="Output directory")
-parser.add_argument('-t', '--threads', type=int, help="Number of threads")
-parser.add_argument('-b', '--banner', action="store_true", help="Print banner and exit")
-argv = parser.parse_args()
-
+argv = parse_args()
 input_wordlist = starter(argv)
 Payloader = Engine()
 
