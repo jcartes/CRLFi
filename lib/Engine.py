@@ -1,6 +1,7 @@
 from termcolor import colored
 from re import search, findall
-from faster_than_requests import get2str
+from requests import get
+from requests.exceptions import Timeout,ConnectionError
 
 from lib.Skipper import Skip
 from lib.Globals import Color
@@ -70,7 +71,7 @@ class Engine:
         return payloads_to_try
 
     def netloc_generator(self, parsed_url, payloads: list) -> list:
-        error_print = lambda e: f"{Color.bad} Skipping payload generation due to: {e}"
+        error_print = lambda e: print(f"{Color.bad} Skipping payload generation due to: {e}")
         skip_print = f"{Color.bad} Skipping URL {colored(parsed_url.netloc, color='cyan')}!"
         if parsed_url.netloc.count('.') >= 5 or len(parsed_url.netloc) > 40:
             print(skip_print)
@@ -81,21 +82,17 @@ class Engine:
         else:
             self.Skipper.add_netloc(parsed_url.netloc)
         try:
-            get2str(urler(parsed_url.netloc))
-        except Exception as E:
+            error = False
+            get(urler(parsed_url.netloc))
+        except ConnectionError:
+            error_print("Connection Error")
             error = True
-            e = E.__class__.__name__
-            if e == "TimeoutError":
-                print(error_print("Request Timeout"))
-            elif e == "OSError":
-                print(error_print("Connection Error"))
-            elif e == "HttpRequestError":
-                if '404' in str(E):
-                    error = False
-                else:
-                    print(E)
-            else:
-                print(e)
-            if error:
-                return []
+        except Timeout:
+            error_print("Request Timeout")
+            error = True
+        except Exception as E:
+            error_print(str(E.__class__.__name__))
+            error = True
+        if error:
+            return []
         return [merge(parsed_url.netloc, payload) for payload in payloads if payload]

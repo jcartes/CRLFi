@@ -31,24 +31,30 @@ def async_generator(url: str):
         return []
     parsed_url = urlparse(urler(url))
     print_asyncgen = lambda data: print(f"{Color.information} Generating {data} for: {colored(url, color='cyan')}")
-    try:
-        if parsed_url.query:
-            print_asyncgen('query')
+    if parsed_url.query:
+        print_asyncgen('query payload')
+        try:
             for payloaded_url in Payloader.query_generator(parsed_url, payloads):
                 to_try.append(payloaded_url)
-            print_asyncgen('path')
+        except Exception as E:
+            print(E)
+        print_asyncgen('path payload')
+        try:
             for payloaded_url in Payloader.path_generator(parsed_url, payloads):
                 to_try.append(payloaded_url)
-        elif parsed_url.path:
-            print_asyncgen('path')
+        except Exception as E:
+            print(E)
+    elif parsed_url.path:
+        print_asyncgen('path payload')
+        try:
             for payloaded_url in Payloader.path_generator(parsed_url, payloads):
                 to_try.append(payloaded_url)
-        elif parsed_url.netloc:
-            print_asyncgen('netloc')
-            for payloaded_url in Payloader.netloc_generator(parsed_url, payloads):
-                to_try.append(payloaded_url)
-    except Exception:
-        print(E,E.__class__)
+        except Exception as E:
+            print(E)
+    elif parsed_url.netloc:
+        print_asyncgen('domain payload')
+        for payloaded_url in Payloader.netloc_generator(parsed_url, payloads):
+            to_try.append(payloaded_url)
 
 with ThreadPoolExecutor(max_workers=argv.threads) as mapper:
     mapper.map(async_generator, input_wordlist)

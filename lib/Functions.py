@@ -27,7 +27,7 @@ def starter(argv):
                 print("{} Use --help".format(Color.bad))
                 exit()
             else:
-                return (line.rstrip('\n').strip(' ') for line in stdin.read().split('\n') if line)
+                return (line.rstrip('\n') for line in stdin.read().split('\n') if line)
         else:
             return [argv.domain.strip(' ')]
     else:

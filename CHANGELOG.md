@@ -1,4 +1,5 @@
 # Version 3.1
+* Try except reduced in async generator to gain 4KB reduction in binary size
 * Try except in threadpoolexecutor is useless as it doesnt error out
 
 # Version 3.0
